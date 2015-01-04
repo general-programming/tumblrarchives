@@ -18,7 +18,7 @@
 			{% endif %}
 			{% if post.data['body'] %} <div class="post_body"> {{post.data['body']|safe}} </div> {% endif %}
 			{% if post.data['caption'] %} <div class="post_caption"> {{post.data['caption']|safe}} </div> {% endif %}
-			<p><a href="{{url_for("post", postid=post.data['id'])}}"> Detail </a></p>
+			<p><a href="{{url_for("post", postid=post.data['id'])}}"> Debug </a></p>
 			<div class="bottom">
 				<i class="fa fa-pencil fa-lg">
 					<b> Posted {{post.data['date']}}. {{post.data['note_count']}} notes. </b>
