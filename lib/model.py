@@ -1,3 +1,4 @@
+# This Python file uses the following encoding: utf-8
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
@@ -6,7 +7,7 @@ from sqlalchemy.dialects.postgresql import JSONB
 
 import os
 
-engine = create_engine(os.environ["POSTGRES_URL"], convert_unicode=True, pool_recycle=3600)
+engine = create_engine(os.environ["POSTGRES_URL"], convert_unicode=True, pool_recycle=3600, echo=True)
 sm = sessionmaker(autocommit=False,
                   autoflush=False,
                   bind=engine)

@@ -1,0 +1,107 @@
+.post {
+	margin: 15px 0px 25px 0px;
+	padding: 15px;
+	float: left;
+	margin-bottom: 25px;
+	word-wrap: break-word;
+	background-color: rgba(222, 222, 222, 0.5);
+	border-radius: 15px;
+}
+
+#desc {
+	text-align:center;
+	padding-top: 10px;
+}
+
+#exo {
+	padding:10px;
+	line-height:15px;
+	margin-top:10px;
+	height:auto;
+}
+
+.player {
+	width:25px;
+	height:25px;
+	overflow:hidden;
+	position:absolute;
+	background:white;
+}
+
+#credit {
+	font-size:12px;
+	line-height:150%;
+	letter-spacing:0px;
+	left:10px;
+	bottom:10px;
+	font-weight:normal;
+	position:fixed;
+	text-transform:uppercase;
+	text-align:center;
+}
+
+
+#credit a {
+	padding:3px;
+	background-color:#fff;
+	-moz-transition-duration:0.5s;
+	-webkit-transition-duration:0.5s;
+	-o-transition-duration:0.5s;
+}
+
+.profile {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	border-radius: 50%;
+	box-shadow: 0 0 0 4px;
+	color: #D2D2D2;
+}
+
+.media-body {
+	padding-left: 15px;
+}
+
+.rebloglink {
+	float: right;
+}
+
+blockquote {
+	border-color: {color:side bars};
+}
+
+.more_notes_link_container {
+	list-style-type: none;
+}
+
+.fa {
+	font-size: 1em;
+}
+
+p img {
+	display: block;
+	max-width: 100%;
+	width: 100%;
+	height: auto;
+}
+
+.post_caption {
+	margin-top: 1em;
+}
+
+.post_caption p {
+	margin: 0 0 1em 0;
+}
+
+.post_caption blockquote p {
+	font-size: 1em;
+}
+
+.post_caption blockquote {
+	margin: 0 0 1em 0;
+	padding: 0 0 0 15px;
+}
+
+.bottom {
+	padding-top: 10px;
+}

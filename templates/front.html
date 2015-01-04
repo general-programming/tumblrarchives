@@ -1,8 +1,18 @@
-<h1> Hello World! </h1>
+{% extends "base.html" %}
 
-<h2> Urls archived </h2>
-<ul>
-{% for url in urls %}
-<li> {{url}} </li>
-{% endfor %}
-</ul>
+{% block content: %}
+
+<div class="container">
+	<div id="body" class="row">
+		<div class="col-md-12">
+			<h2> Urls archived </h2>
+			<ul>
+			{% for x in urls %}
+			{% set url = x[0] %}
+				<li> <a href="{{url_for("archive", url=url)}}"> {{url}} </a> </li>
+			{% endfor %}
+			</ul>
+		</div>
+	</div>
+</div>
+{% endblock %}
