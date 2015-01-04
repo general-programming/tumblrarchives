@@ -48,8 +48,7 @@ def post(postid=None):
     except NoResultFound:
         return redirect(url_for('front'))
 
-    json = request.args.get('json', False)
-    if json:
+    if 'json' in request.args:
         return jsonify(post.data)
 
     return render_template("post.html",
