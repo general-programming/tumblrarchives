@@ -1,4 +1,4 @@
-js-all:
+js_all:
     filters: jsmin
     output: js/packed.js
     contents:
