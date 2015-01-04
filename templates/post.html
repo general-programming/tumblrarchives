@@ -6,9 +6,21 @@
 	<div id="body" class="row">
 		<div class="col-md-12">
 			<h1> Post {{post['id']}} </h1>
-			
-			<h2> JSON </h2>
+			<hr>
+			<h2> JSON <small> <a href="{{url_for("post", postid=post.data['id'], json=1)}}"> raw </a></small> </h2>
 			<code> {{post.data|tojson}} </code>
+			<hr>
+			<h2> Formatted </h2>
+			<table class="table table-bordered table-hover table-striped">
+				<tbody>
+					{% for x in post.data %}
+					<tr>
+						<td> {{x}} </td>
+						<td> {{post.data[x]}} </td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
 		</div>
 	</div>
 </div>

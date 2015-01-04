@@ -17,6 +17,7 @@ from lib.requests import (
 from lib.model import Post
 from lib.classes import Page
 from webhelpers.paginate import PageURL
+from sqlalchemy.dialects.postgresql import ARRAY, TEXT
 from sqlalchemy.orm.exc import NoResultFound
 
 import os
@@ -61,6 +62,8 @@ def archive(url=None, page=1):
         return redirect(url_for('front'))
 
     page = request.args.get('page', 1)
+    tag = request.args.get('tag', None)
+
     if page < 1:
         return redirect(url_for('archive', page=1))
 

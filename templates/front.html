@@ -5,11 +5,10 @@
 <div class="container">
 	<div id="body" class="row">
 		<div class="col-md-12">
-			<h2> Urls archived </h2>
+			<h2> Archived Blogs </h2>
 			<ul>
 			{% for x in urls %}
-			{% set url = x[0] %}
-				<li> <a href="{{url_for("archive", url=url)}}"> {{url}} </a> </li>
+				<li> <a href="{{url_for("archive", url=x[0])}}"> {{x[0]}} </a> </li>
 			{% endfor %}
 			</ul>
 		</div>
