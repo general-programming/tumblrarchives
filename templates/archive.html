@@ -22,7 +22,7 @@
 					<b> Posted {{post.data['date']}}. {{post.data['note_count']}} notes. </b>
 				</i>
 				<!-- XXX make tags work -->
-				{% if 'tags' in post.data %} <p> Tags: {% for tag in post.data['tags'] %} <a href="{{url_for("archive", url=url, tag=tag)}}">{{tag}}</a>, {% endfor %}</p> {% endif %}
+				{% if post.data['tags'] %} <p> Tags: {% for tag in post.data['tags'] %} <a href="{{url_for("archive", url=url, tag=tag)}}">{{tag}}</a>, {% endfor %}</p> {% endif %}
 			</div>
 		</div>
 	</div>
