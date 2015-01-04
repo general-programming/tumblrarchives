@@ -9,6 +9,11 @@ from flask import (
     jsonify
 )
 
+from flask.ext.assets import (
+    Environment,
+    Bundle
+)
+
 from lib.requests import (
     connect_sql,
     disconnect_sql
@@ -25,6 +30,11 @@ app = Flask(__name__)
 
 # Debug
 app.config['DEBUG'] = os.environ.get('DEBUG', False)
+
+# Static assets
+assets = Environment(app)
+assets.from_yaml("assets.yaml")
+
 
 app.before_request(connect_sql)
 app.teardown_request(disconnect_sql)
