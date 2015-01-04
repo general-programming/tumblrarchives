@@ -2,3 +2,4 @@
 extra/
 venv/
 .DS_Store
+.webassets-cache/
