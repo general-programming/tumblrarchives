@@ -17,7 +17,6 @@ from lib.requests import (
 from lib.model import Post
 from lib.classes import Page
 from webhelpers.paginate import PageURL
-from sqlalchemy.dialects.postgresql import ARRAY, TEXT
 from sqlalchemy.exc import DataError
 from sqlalchemy.orm.exc import NoResultFound
 import os
