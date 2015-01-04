@@ -8,9 +8,7 @@
 	<title>Archived Blogs</title>
 
 
-	{% assets "css_all" %}
-	<link rel="stylesheet" href="{{ ASSET_URL }}" type="text/css" />
-	{% endassets %}
+	{% assets "css_all" %}<link rel="stylesheet" href="{{ ASSET_URL }}" type="text/css" />{% endassets %}
 	{% block styles %}{% endblock %}
 </head>
 <body>
@@ -39,9 +37,7 @@
 
 {% block content %}{% endblock %}
 
-{% assets "js_all" %}
-	<script type="text/javascript" src="{{ ASSET_URL }}"></script>
-{% endassets %}
+{% assets "js_all" %}<script type="text/javascript" src="{{ASSET_URL}}"></script>{% endassets %}
 {% block scripts %}{% endblock %}
 
 </body>
