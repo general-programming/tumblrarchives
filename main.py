@@ -18,8 +18,8 @@ from lib.model import Post
 from lib.classes import Page
 from webhelpers.paginate import PageURL
 from sqlalchemy.dialects.postgresql import ARRAY, TEXT
+from sqlalchemy.exc import DataError
 from sqlalchemy.orm.exc import NoResultFound
-
 import os
 
 app = Flask(__name__)
@@ -40,12 +40,9 @@ def front():
 
 @app.route("/post/<postid>")
 def post(postid=None):
-    if not postid:
-        return redirect(url_for('front'))
-
     try:
         post = g.sql.query(Post).filter(Post.data['id'] == postid).one()
-    except NoResultFound:
+    except (NoResultFound, DataError):
         return redirect(url_for('front'))
 
     if 'json' in request.args:
