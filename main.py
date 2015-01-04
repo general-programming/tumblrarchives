@@ -32,7 +32,7 @@ app.config['DEBUG'] = os.environ.get('DEBUG', False)
 assets = Environment(app)
 assets.from_yaml("assets.yaml")
 
-
+# Request handlers
 app.before_request(connect_sql)
 app.teardown_request(disconnect_sql)
 
