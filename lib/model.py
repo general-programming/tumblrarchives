@@ -7,7 +7,13 @@ from sqlalchemy.dialects.postgresql import JSONB
 
 import os
 
-engine = create_engine(os.environ["POSTGRES_URL"], convert_unicode=True, pool_recycle=3600, echo=True)
+debug = os.environ.get('DEBUG', False)
+
+engine = create_engine(os.environ["POSTGRES_URL"], convert_unicode=True, pool_recycle=3600)
+
+if debug:
+    engine.echo = True
+
 sm = sessionmaker(autocommit=False,
                   autoflush=False,
                   bind=engine)
