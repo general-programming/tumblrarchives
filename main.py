@@ -9,10 +9,7 @@ from flask import (
     jsonify
 )
 
-from flask.ext.assets import (
-    Environment,
-    Bundle
-)
+from flask.ext.assets import Environment
 
 from lib.requests import (
     connect_sql,
