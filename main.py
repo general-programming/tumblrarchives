@@ -70,7 +70,7 @@ def archive(url=None, page=1):
         return redirect(url_for('archive', page=1))
 
     url_for_page = PageURL(url_for("archive", url=url), {"page": page})
-    posts = Page(g.sql.query(Post).filter(Post.url == url).order_by(Post.data['timestamp'].desc()), page=page, url=url_for_page)
+    posts = Page(g.sql.query(Post).filter(Post.url == url).order_by(Post.data['timestamp'].desc()), items_per_page=15, page=page, url=url_for_page)
 
     return render_template("archive.html",
         url=url,
