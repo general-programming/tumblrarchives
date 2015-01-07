@@ -105,3 +105,7 @@ p img {
 .bottom {
 	padding-top: 10px;
 }
+
+h1 {
+	margin-top: 0;
+}
