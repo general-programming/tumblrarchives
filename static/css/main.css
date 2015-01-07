@@ -8,47 +8,6 @@
 	border-radius: 15px;
 }
 
-#desc {
-	text-align:center;
-	padding-top: 10px;
-}
-
-#exo {
-	padding:10px;
-	line-height:15px;
-	margin-top:10px;
-	height:auto;
-}
-
-.player {
-	width:25px;
-	height:25px;
-	overflow:hidden;
-	position:absolute;
-	background:white;
-}
-
-#credit {
-	font-size:12px;
-	line-height:150%;
-	letter-spacing:0px;
-	left:10px;
-	bottom:10px;
-	font-weight:normal;
-	position:fixed;
-	text-transform:uppercase;
-	text-align:center;
-}
-
-
-#credit a {
-	padding:3px;
-	background-color:#fff;
-	-moz-transition-duration:0.5s;
-	-webkit-transition-duration:0.5s;
-	-o-transition-duration:0.5s;
-}
-
 .profile {
 	display: block;
 	margin-left: auto;
