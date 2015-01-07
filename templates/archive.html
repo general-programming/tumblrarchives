@@ -6,29 +6,7 @@
 
 <div class="container">
 {% for post in posts %}
-	<div class="row">
-		<div class="col-md-12 post">
-			{% if post.data['title'] %} <div class="post_title"> <h1> {{post.data['title']|safe}} </h1> </div> {% endif %}
-			{% if 'photos' in post.data %}
-			<div class="post_photos">
-				{% for image in post.data['photos'] %}
-				<img src="{{image['original_size']['url']}}" class="img-responsive">
-				{% endfor %}
-			</div>
-			{% endif %}
-			{% if post.data['body'] %} <div class="post_body"> {{post.data['body']|safe}} </div> {% endif %}
-			{% if post.data['caption'] %} <div class="post_caption"> {{post.data['caption']|safe}} </div> {% endif %}
-			<p><a href="{{url_for("post", postid=post.data['id'])}}"> Debug </a></p>
-			<div class="bottom">
-				<i class="fa fa-pencil fa-lg">
-					<b> Posted {{post.data['date']}}. {{post.data['note_count']}} notes. </b>
-				</i>
-				<i style="float: right" class="fa fa-retweet"> <a href="http://tumblr.com/reblog/{{post.data['id']}}/{{post.data['reblog_key']}}"> Reblog </a> </i>
-				<!-- XXX make tags work -->
-				{% if post.data['tags'] %} <p> Tags: {% for tag in post.data['tags'] %} <a href="{{url_for("archive", url=url, tag=tag)}}">{{tag}}</a>, {% endfor %}</p> {% endif %}
-			</div>
-		</div>
-	</div>
+	{{renderpost(post)}}
 {% endfor %}
 	<div class="row">
 		<div class="col-md-12">
