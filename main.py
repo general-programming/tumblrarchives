@@ -37,9 +37,7 @@ app.teardown_request(disconnect_sql)
 def front():
     urls = g.sql.query(Post.url).distinct().all()
 
-    return render_template("front.html",
-        urls=urls
-    )
+    return render_template("front.html", urls=urls)
 
 @app.route("/post/<postid>")
 def post(postid=None):
@@ -51,9 +49,7 @@ def post(postid=None):
     if 'json' in request.args:
         return jsonify(post.data)
 
-    return render_template("post.html",
-        post=post
-    )
+    return render_template("post.html", post=post)
 
 @app.route("/archive/<url>")
 def archive(url=None, page=1):
