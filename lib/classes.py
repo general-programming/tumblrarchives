@@ -9,7 +9,7 @@ class Page(paginate.Page):
 
     def pager(self, *args, **kwargs):
         kwargs.update(
-            format=u"<nav><ul class='pagination'>$link_previous ~2~ $link_next</ul></nav>",
+            format=u'<div class="row"><div class="col-md-12"><nav><ul class="pagination">$link_previous ~2~ $link_next</ul></nav></div></div>',
             symbol_previous=u'«', symbol_next=u'»',
             curpage_attr={'class': 'active'}, link_attr={}
         )
