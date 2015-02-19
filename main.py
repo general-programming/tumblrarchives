@@ -19,6 +19,7 @@ from lib.requests import (
 from lib.model import Post
 from lib.classes import Page
 from webhelpers.paginate import PageURL
+from sqlalchemy.dialects.postgresql import TEXT
 from sqlalchemy.exc import DataError
 from sqlalchemy.orm.exc import NoResultFound
 
@@ -66,11 +67,20 @@ def archive(url=None, page=1):
         return redirect(url_for('archive', page=1))
 
     url_for_page = PageURL(url_for("archive", url=url), {"page": page})
-    posts = Page(g.sql.query(Post).filter(Post.url == url).order_by(Post.data['timestamp'].desc()), items_per_page=15, page=page, url=url_for_page)
+
+    if tag:
+        url_for_page.params.update({"tag": tag})
+        # complete tag hack because i have no idea how to filter json arrays with jsonb (lol)
+        sql = g.sql.query(Post).filter(Post.url == url).filter(Post.data['tags'].cast(TEXT).contains('"' + tag + '"')).order_by(Post.data['timestamp'].desc())
+    else:
+        sql = g.sql.query(Post).filter(Post.url == url).order_by(Post.data['timestamp'].desc())
+
+    posts = Page(sql, items_per_page=15, page=page, url=url_for_page)
 
     return render_template("archive.html",
         url=url,
-        posts=posts
+        posts=posts,
+        tag=tag
     )
 
 if __name__ == "__main__":
