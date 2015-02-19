@@ -32,7 +32,7 @@
 			<i class="fa fa-pencil fa-lg">
 				<b> Posted {{post.data['date']}}. {{post.data['note_count']}} notes. </b>
 			</i>
-			<i style="float: right" class="fa fa-retweet"> <a href="http://tumblr.com/reblog/{{post.data['id']}}/{{post.data['reblog_key']}}"> Reblog </a> </i>2
+			<i style="float: right" class="fa fa-retweet"> <a href="http://tumblr.com/reblog/{{post.data['id']}}/{{post.data['reblog_key']}}"> Reblog </a> </i>
 			{% if post.data['tags'] %}
 			<p> Tags: {% for tag in post.data['tags'] %} <a href="{{url_for("archive", url=url, tag=tag)}}">{{tag}}</a> {{"," if tag != post.data['tags'][-1]}} {% endfor %}</p> {% endif %}
 		</div>
