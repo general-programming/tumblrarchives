@@ -15,10 +15,10 @@
 			<h2> Formatted </h2>
 			<table class="table table-bordered table-hover table-striped">
 				<tbody>
-					{% for x in post.data %}
+					{% for key, value in post.data.iteritems() %}
 					<tr>
-						<td> {{x}} </td>
-						<td> {{post.data[x]}} </td>
+						<td> {{key}} </td>
+						<td> {{value}} </td>
 					</tr>
 					{% endfor %}
 				</tbody>
