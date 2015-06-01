@@ -35,9 +35,7 @@ app.teardown_request(disconnect_sql)
 
 @app.route("/")
 def front():
-    urls = g.sql.query(Post.url).distinct().all()
-
-    return render_template("front.html", urls=urls)
+    return render_template("front.html")
 
 @app.route("/post/<postid>")
 def post(postid=None):
