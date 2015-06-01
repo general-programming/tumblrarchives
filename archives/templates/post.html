@@ -5,17 +5,17 @@
 {% block content: %}
 
 <div class="container">
-	<div class="row">
-		<div class="s12 debug">
-			<!-- JSON post -->
-			<div>
+	<div class="row debug">
+		<!-- JSON post -->
+		<div class="col s12">
 			<pre class="code"> 
-				<span class="codeinfo">JSON <a href="{{url_for("main.post", postid=post.data['id'], json=1)}}"> raw </a></span>
+			<span class="codeinfo">JSON <a href="{{url_for("main.post", postid=post.data['id'], json=1)}}"> raw </a></span>
 <code>{{post.data|prettyjson}}</code>
 			</pre>
-			</div>
+		</div>
 
-			<!-- Table card -->
+		<!-- Table card -->
+		<div class="col s12">
 			<div class="card">
 				<h2> Table </h2>
 				<table class="table bordered hover striped">

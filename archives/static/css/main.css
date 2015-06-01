@@ -75,10 +75,6 @@ p img {
 	padding: 0 0 0 15px;
 }
 
-.bottom {
-	padding-top: 10px;
-}
-
 h1, h2, h3 {
 	margin-top: 0;
 }
@@ -106,5 +102,5 @@ li.logo:hover {
 }
 
 .bottom .btn-floating {
-	margin: 0 0.5em;
+	margin: 0.5em;
 }

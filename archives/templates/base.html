@@ -1,5 +1,5 @@
 {% macro renderpost(post) -%}
-<div class="s12 post card">
+<div class="col s12 post card">
 	{% if post.data['title'] %}
 	<div class="post_title">
 		<h2>{% if post.data['url'] %}<a href="{{post.data['url']}}">{% endif %}{{post.data['title']|safe}}{% if post.data['url'] %}</a>{% endif %}</h2>
@@ -48,7 +48,7 @@
 		<a style="float: right" class="btn-floating btn-large waves-effect waves-light red" href="{{url_for("main.post", postid=post.data['id'])}}"> <i class="mdi-action-bug-report"></i> </a>
 		<a style="float: right" class="btn-floating btn-large waves-effect waves-light blue accent-3" target="_blank" href="http://tumblr.com/reblog/{{post.data['id']}}/{{post.data['reblog_key']}}"> <i class="mdi-av-repeat"></i></a>
 		{% if post.data['tags'] %}
-		<p> {% for tag in post.data['tags'] %} <a href="{{url_for("main.archive", url=url, tag=tag)}}">#{{tag}}</a> {{"," if tag != post.data['tags'][-1]}} {% endfor %}</p>
+		<p> {% for tag in post.data['tags'] %} <a href="{{url_for("main.archive", url=url, tag=tag)}}">#{{tag}}</a> {% endfor %}</p>
 		{% endif %}
 	</div>
 </div>
