@@ -7,7 +7,15 @@ from sqlalchemy.orm.exc import NoResultFound
 from archives.lib.model import Post
 from archives.lib.classes import Page
 
+import json
+
 blueprint = Blueprint('main', __name__)
+
+# prettyjson filter
+def prettyjson(data):
+    return json.dumps(data, indent=4)
+
+blueprint.add_app_template_filter(prettyjson)
 
 @blueprint.route("/")
 def front():
@@ -30,11 +38,11 @@ def archive(url=None, page=1):
     if not url or not g.sql.query(Post).filter(Post.url == url).limit(1).count():
         return redirect(url_for('main.front'))
 
-    page = request.args.get('page', 1)
+    page = request.args.get('page', None)
     tag = request.args.get('tag', None)
 
-    if page < 1:
-        return redirect(url_for('main.archive', page=1))
+    if page < 1 or not page:
+        return redirect(url_for('main.archive', url=url, page=1))
 
     url_for_page = PageURL(url_for("main.archive", url=url), {"page": page})
 

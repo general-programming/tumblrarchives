@@ -11,9 +11,11 @@ class Page(paginate.Page):
 
     def pager(self, *args, **kwargs):
         kwargs.update(
-            format=u'<div class="row"><div class="col-md-12"><nav><ul class="pagination">$link_previous ~2~ $link_next</ul></nav></div></div>',
-            symbol_previous=u'«', symbol_next=u'»',
-            curpage_attr={'class': 'active'}, link_attr={}
+            format=u'<ul class="pagination">$link_previous ~2~ $link_next</ul></nav>',
+            symbol_previous=u'«',
+            symbol_next=u'»',
+            curpage_attr={'class': 'active waves-effect'},
+            link_attr={'class': 'waves-effect'}
         )
         return super(Page, self).pager(*args, **kwargs)
 
@@ -32,8 +34,7 @@ class Page(paginate.Page):
         html = super(Page, self)._range(regexp_match)
         # Convert ..
         dotdot = '<span class="pager_dotdot">..</span>'
-        dotdot_link = HTML.li(HTML.a('...', href='#'), class_='disabled')
-        html = re.sub(dotdot, dotdot_link, html)
+        html = re.sub(dotdot, "", html)
 
         # Convert current page
         text = '%s' % self.page

@@ -1,61 +1,60 @@
 {% macro renderpost(post) -%}
-<div class="row">
-	<div class="col-md-12 post">
-		{% if post.data['title'] %}
-		<div class="post_title">
-			<h1> {{post.data['title']|safe}} </h1>
-		</div>
-		{% endif %}
+<div class="s12 post card">
+	{% if post.data['title'] %}
+	<div class="post_title">
+		<h2>{% if post.data['url'] %}<a href="{{post.data['url']}}">{% endif %}{{post.data['title']|safe}}{% if post.data['url'] %}</a>{% endif %}</h2>
+	</div>
+	{% endif %}
 
-		{% if 'photos' in post.data %}
-		<div class="post_photos">
-			{% for image in post.data['photos'] %}
-			<img src="{{image['original_size']['url']}}" class="img-responsive">
-			{% endfor %}
+	{% if 'asking_name' in post.data and 'asking_url' in post.data %}
+	<div class="card ask">
+		<div class="askinfo grey lighten-3">
+			<span class="ask-user">
+				@{{post.data['asking_name']}} asked
+			</span>
+			<p class="ask-question">
+				{{post.data['question']|safe}}
+			</p>
 		</div>
-		{% endif %}
+	</div>
 
-		{% if post.data['description'] %}
-		<div class="post_description"> {{post.data['description']|safe}} </div> 
-		{% endif %}
+	<div class="post_answer">
+		{{post.data['answer']|safe}}
+	</div>
+	{% endif %}
 
-		{% if post.data['body'] %}
-		<div class="post_body"> {{post.data['body']|safe}} </div> 
-		{% endif %}
+	{% if 'photos' in post.data %}
+	<div class="post_photos">
+		{% for image in post.data['photos'] %}
+		<img src="{{image['original_size']['url']}}" class="responsive-img">
+		{% endfor %}
+	</div>
+	{% endif %}
 
-		{% if post.data['caption'] %}
-		<div class="post_caption"> {{post.data['caption']|safe}} </div> 
-		{% endif %}
+	{% if post.data['description'] %}
+	<div class="post_description"> {{post.data['description']|safe}} </div> 
+	{% endif %}
 
-		{% if 'asking_name' in post.data and 'asking_url' in post.data %}
-		<div class="well">
-			<div style="margin-bottom: 15px" class="media">
-				<div class="askimage"> <img src="/static/img/anon.png" style="height: 64px; width: 64px" class="profile media-object pull-left"> </div>
-				<div class="media-body">
-					<h4 class="media-heading">
-						{{post.data['asking_name']}} asked
-					</h4>
-					{{post.data['question']|safe}}
-				</div>
-			</div>
-		</div>
-		<div class="caption">
-			{{post.data['answer']|safe}}
-		</div>
+	{% if post.data['body'] %}
+	<div class="post_body"> {{post.data['body']|safe}} </div> 
+	{% endif %}
+
+	{% if post.data['caption'] %}
+	<div class="post_caption"> {{post.data['caption']|safe}} </div> 
+	{% endif %}
+
+	<div class="bottom">
+		<b> {{post.data['date']}} </b> <br>
+		<b> {{post.data['note_count']}} notes. </b>
+		<a style="float: right" class="btn-floating btn-large waves-effect waves-light red" href="{{url_for("main.post", postid=post.data['id'])}}"> <i class="mdi-action-bug-report"></i> </a>
+		<a style="float: right" class="btn-floating btn-large waves-effect waves-light blue" target="_blank" href="http://tumblr.com/reblog/{{post.data['id']}}/{{post.data['reblog_key']}}"> <i class="mdi-av-repeat"></i></a>
+		{% if post.data['tags'] %}
+		<p> {% for tag in post.data['tags'] %} <a href="{{url_for("main.archive", url=url, tag=tag)}}">#{{tag}}</a> {{"," if tag != post.data['tags'][-1]}} {% endfor %}</p>
 		{% endif %}
-		<p><a href="{{url_for("main.post", postid=post.data['id'])}}"> Debug </a></p>
-		<div class="bottom">
-			<i class="fa fa-pencil fa-lg">
-				<b> Posted {{post.data['date']}}. {{post.data['note_count']}} notes. </b>
-			</i>
-			<i style="float: right" class="fa fa-retweet"> <a href="http://tumblr.com/reblog/{{post.data['id']}}/{{post.data['reblog_key']}}"> Reblog </a> </i>
-			{% if post.data['tags'] %}
-			<p> Tags: {% for tag in post.data['tags'] %} <a href="{{url_for("main.archive", url=url, tag=tag)}}">{{tag}}</a> {{"," if tag != post.data['tags'][-1]}} {% endfor %}</p>
-			{% endif %}
-		</div>
 	</div>
 </div>
 {%- endmacro %}
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -65,38 +64,51 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Archived Blogs</title>
 
-
-	{% assets "css_all" %}<link rel="stylesheet" href="{{ ASSET_URL }}" type="text/css" />{% endassets %}
+	<!-- Stylesheets -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.96.1/css/materialize.min.css">
+	<link rel="stylesheet" href="/static/css/font-awesome.min.css?1" type="text/css">
+	<link rel="stylesheet" href="/static/css/main.css?1" type="text/css">
 	{% block styles %}{% endblock %}
 </head>
 <body>
 
-<nav class="navbar navbar-default">
-	<div class="container-fluid">
-		<!-- Brand and toggle get grouped for better mobile display -->
-		<div class="navbar-header">
-			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-				<span class="sr-only">Toggle navigation</span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-			</button>
-			<a class="navbar-brand" href="#">Archived Blogs</a>
+<header>
+	<nav class="top-nav green">
+		<ul class="left">
+			<a href="#" data-activates="nav-mobile" style="display: block" class="button-collapse full">
+				<i class="mdi-navigation-menu"></i>
+			</a>
+		</ul>
+		<div class="nav-wrapper">
+			<ul class="brand-logo center">
+				<span class="brand-section">Archives</span>
+			</ul>
 		</div>
 
 		<!-- Collect the nav links, forms, and other content for toggling -->
-		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-			<ul class="nav navbar-nav">
-				<li{% if active_page == "home" %} class="active"{% endif %}><a href="/">Home</a></li>
-			</ul>
-		</div><!-- /.navbar-collapse -->
-	</div><!-- /.container-fluid -->
-</nav>
+		<ul id="nav-mobile" class="side-nav">
+			<li class="logo">
+				<i class="mdi-content-archive large light-blue-text"></i>
+			</li>
+			<li{% if active_page == "home" %} class="active"{% endif %}><a href="/">Home</a></li>
+			{% if url %}
+			<li class="active"><a href="{{url_for("main.archive", url=url, page=request.args.page)}}">{{url}}</a></li>
+			{% endif %}
+			{% if post %}
+			<li class="active"><a href="{{url_for("main.post", postid=post.data['id'])}}">#{{post.data['id']}}</a></li>
+			{% endif %}
+		</ul>
+	</nav>
+</header>
 
+<main>
 {% block content %}{% endblock %}
+</main>
 
-{% assets "js_all" %}<script type="text/javascript" src="{{ASSET_URL}}"></script>{% endassets %}
-{% block scripts %}{% endblock %}
+	<!-- Scripts -->
+	<script src="/static/js/jquery.min.js?1"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.96.1/js/materialize.min.js"></script>
+	<script src="/static/js/main.js?1"></script>
 
 </body>
 </html>

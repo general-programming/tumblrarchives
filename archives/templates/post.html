@@ -5,28 +5,33 @@
 {% block content: %}
 
 <div class="container">
-	<div id="body" class="row">
-		<div class="col-md-12">
-			<h1> Post {{post['id']}} </h1>
-			<hr>
-			<h2> JSON <small> <a href="{{url_for("main.post", postid=post.data['id'], json=1)}}"> raw </a></small> </h2>
-			<code> {{post.data|tojson}} </code>
-			<hr>
-			<h2> Formatted </h2>
-			<table class="table table-bordered table-hover table-striped">
-				<tbody>
-					{% for key, value in post.data.iteritems() %}
-					<tr>
-						<td> {{key}} </td>
-						<td> {{value}} </td>
-					</tr>
-					{% endfor %}
-				</tbody>
-			</table>
+	<div class="row">
+		<div class="s12 debug">
+			<!-- JSON post -->
+			<div>
+			<pre class="code"> 
+				<span class="codeinfo">JSON <a href="{{url_for("main.post", postid=post.data['id'], json=1)}}"> raw </a></span>
+<code>{{post.data|prettyjson}}</code>
+			</pre>
+			</div>
+
+			<!-- Table card -->
+			<div class="card">
+				<h2> Table </h2>
+				<table class="table bordered hover striped">
+				{% for key, value in post.data.iteritems() %}
+				<tr>
+					<td> {{key}} </td>
+					<td> {{value}} </td>
+				</tr>
+				{% endfor %}
+				</table>
+			</div>
 		</div>
+
+		<!-- Post card -->
+		<h1> Preview </h1>
+		{{renderpost(post)}}
 	</div>
-	<hr>
-	<h1> Preview </h1>
-	{{renderpost(post)}}
 </div>
 {% endblock %}
