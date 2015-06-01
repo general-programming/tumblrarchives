@@ -11,13 +11,13 @@ from flask import (
 
 from flask.ext.assets import Environment
 
-from lib.requests import (
+from archives.lib.requests import (
     connect_sql,
     disconnect_sql
 )
 
-from lib.model import Post
-from lib.classes import Page
+from archives.lib.model import Post
+from archives.lib.classes import Page
 from webhelpers.paginate import PageURL
 from sqlalchemy.dialects.postgresql import TEXT
 from sqlalchemy.exc import DataError
@@ -27,7 +27,7 @@ app = Flask(__name__)
 
 # Static assets
 assets = Environment(app)
-assets.from_yaml("assets.yaml")
+assets.from_yaml("archives/assets.yaml")
 
 # Request handlers
 app.before_request(connect_sql)

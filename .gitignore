@@ -1,6 +1,8 @@
 *.pyc
-extra/
-venv/
+env/
 .DS_Store
 .webassets-cache/
 packed.*
+*.egg-info
+build/
+dist/
