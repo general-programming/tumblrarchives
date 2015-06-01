@@ -9,7 +9,7 @@
 		<div class="col-md-12">
 			<h1> Post {{post['id']}} </h1>
 			<hr>
-			<h2> JSON <small> <a href="{{url_for("post", postid=post.data['id'], json=1)}}"> raw </a></small> </h2>
+			<h2> JSON <small> <a href="{{url_for("main.post", postid=post.data['id'], json=1)}}"> raw </a></small> </h2>
 			<code> {{post.data|tojson}} </code>
 			<hr>
 			<h2> Formatted </h2>

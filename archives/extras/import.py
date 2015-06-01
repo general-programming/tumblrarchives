@@ -10,7 +10,7 @@ sql = sm()
 method = sys.argv[1]
 url = sys.argv[2]
 
-ids = set(x[0] for x in sql.query(Post.data['id']).all())
+ids = set(x[0] for x in sql.query(Post.data['id']).filter(Post.url == url).all())
 
 if method == "json":
     posts = json.load(open(url+".json"))
