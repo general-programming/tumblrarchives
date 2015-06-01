@@ -44,7 +44,7 @@
 	{% endif %}
 
 	<div class="bottom">
-		<b> {{post.data['date']}} </b>
+		<b title="{{post.data['date']}}"> {{post.data['timestamp']|prettydate}} </b>
 		<a style="float: right" class="btn-floating btn-large waves-effect waves-light red" href="{{url_for("main.post", postid=post.data['id'])}}"> <i class="mdi-action-bug-report"></i> </a>
 		<a style="float: right" class="btn-floating btn-large waves-effect waves-light blue accent-3" target="_blank" href="http://tumblr.com/reblog/{{post.data['id']}}/{{post.data['reblog_key']}}"> <i class="mdi-av-repeat"></i></a>
 		{% if post.data['tags'] %}
