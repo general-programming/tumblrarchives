@@ -1,0 +1,2 @@
+# This file is to make dokku wait 3 seconds instead of the regular 35 seconds for worker startup.
+WAIT=3
