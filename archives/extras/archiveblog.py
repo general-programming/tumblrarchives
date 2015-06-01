@@ -5,8 +5,9 @@ import json
 import redis
 import time
 import sys
+import os
 
-r = redis.Redis()
+r = redis.Redis(host=os.environ['REDIS_HOST'], port=int(os.environ['REDIS_PORT']), db=int(os.environ['REDIS_DB']))
 
 # Authenticate via OAuth
 client = pytumblr.TumblrRestClient(
