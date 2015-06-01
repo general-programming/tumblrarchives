@@ -15,6 +15,10 @@
 		</div>
 		{% endif %}
 
+		{% if post.data['description'] %}
+		<div class="post_description"> {{post.data['description']|safe}} </div> 
+		{% endif %}
+
 		{% if post.data['body'] %}
 		<div class="post_body"> {{post.data['body']|safe}} </div> 
 		{% endif %}
