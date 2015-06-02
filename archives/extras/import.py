@@ -1,4 +1,5 @@
 import sys
+import os
 import pytumblr
 import time
 from archives.lib.model import sm, Post
@@ -36,10 +37,8 @@ blog = Blog(sys.argv[1])
 
 # Tumblr crawling
 client = pytumblr.TumblrRestClient(
-    'Lo5py8ME9G1GGLVjQpKvk8LPqYIfe3L4LRxv9RialSc2wgrYxQ',
-    '82sN1yPCNI7dpmqzSNPILhVEp0TR8P7Bnb6xpY3B6EX7xWIpXI',
-    'B61AMygyQ4fTYMM324Nc91LCBA05hphJs68aPaWP4ijn3WhlpW',
-    'DtsNK3kC5hMGRvfntiB1IUY9MhgqGmrCwaw6MbhMvAf1AXZSzL'
+    os.environ.get("TUMBLR_CONSUMER_KEY"),
+    os.environ.get("TUMBLR_CONSUMER_SECRET")
 )
 
 # Make the request
@@ -59,6 +58,7 @@ while offset < info['blog']['posts']:
         status = blog.add(post)
         if status == "indb":
             bad += 1
+            continue
         print post
         print "-"*60
     print "%s/%s" % (offset, info['blog']['posts'])
