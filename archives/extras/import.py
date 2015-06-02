@@ -44,16 +44,14 @@ client = pytumblr.TumblrRestClient(
 # Make the request
 info = client.blog_info(blog.url)
 
-offset = 0
 bad = 0
 
-while offset < info['blog']['posts']:
+for offset in xrange(0, info['blog']['posts'] + 20, 20):
     if bad >= 5:
         print "All posts crawled. (Probarly)"
         break
 
     posts = client.posts(blog.url+".tumblr.com", offset=offset)['posts']
-    offset += 20
     for post in posts:
         status = blog.add(post)
         if status == "indb":
