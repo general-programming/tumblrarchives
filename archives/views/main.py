@@ -5,7 +5,7 @@ from sqlalchemy.exc import DataError
 from sqlalchemy.orm.exc import NoResultFound
 
 from archives.lib.model import Post
-from archives.lib.classes import Page
+from archives.lib import Page
 
 import json
 from datetime import datetime

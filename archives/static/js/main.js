@@ -17,4 +17,6 @@ $(document).ready(function() {
 			$(".debugbutton").show();
 		}
 	}
+
+	$(".post img").addClass("responsive-img");
 });
