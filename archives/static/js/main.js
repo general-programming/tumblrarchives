@@ -15,6 +15,7 @@ $(document).ready(function() {
 	if (haslocalStorage) {
 		if (localStorage.getItem("debug") === "on") {
 			$(".debugbutton").show();
+			$(".debug").show();
 		}
 	}
 
