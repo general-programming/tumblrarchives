@@ -1,6 +1,7 @@
 from webhelpers.paginate import PageURL
 from flask import Blueprint, request, render_template, g, url_for, jsonify, redirect
 from sqlalchemy.dialects.postgresql import TEXT
+from sqlalchemy import func
 from sqlalchemy.exc import DataError
 from sqlalchemy.orm.exc import NoResultFound
 
@@ -93,7 +94,7 @@ def archive(url=None, page=1):
     if tag:
         url_for_page.params.update({"tag": tag})
         # complete tag hack because i have no idea how to filter json arrays with jsonb (lol)
-        sql = g.sql.query(Post).filter(Post.url == url).filter(Post.data['tags'].cast(TEXT).contains('"' + tag + '"')).order_by(Post.data['timestamp'].desc())
+        sql = g.sql.query(Post).filter(Post.url == url).filter(func.lower(Post.data['tags'].cast(TEXT)).contains('"' + tag + '"')).order_by(Post.data['timestamp'].desc())
     else:
         sql = g.sql.query(Post).filter(Post.url == url).order_by(Post.data['timestamp'].desc())
 
