@@ -44,8 +44,7 @@
 	{% endif %}
 
 	<div class="bottom">
-		<b title="{{post.data['date']}}"> {{post.data['timestamp']|prettydate}} </b>
-		<a style="float: right; display: none" class="btn-floating btn-large waves-effect waves-light red debugbutton" href="{{url_for("main.post", postid=post.data['id'])}}"> <i class="mdi-action-bug-report"></i> </a>
+		<a href="{{url_for("main.post", postid=post.data['id'])}}"><b title="{{post.data['date']}}">{{post.data['timestamp']|prettydate}}</b></a>
 		<a style="float: right" class="btn-floating btn-large waves-effect waves-light blue accent-3" target="_blank" href="http://tumblr.com/reblog/{{post.data['id']}}/{{post.data['reblog_key']}}"> <i class="mdi-av-repeat"></i></a>
 		{% if post.data['tags'] %}
 		<p> {% for tag in post.data['tags'] %} <a href="{{url_for("main.archive", url=url, tag=tag, page=1)}}">#{{tag}}</a> {% endfor %}</p>
@@ -93,6 +92,7 @@
 			<li class="active"><a href="{{url_for("main.archive", url=url, page=request.args.page)}}">{{url}}</a></li>
 			{% endif %}
 			{% if post %}
+			<li><a href="{{url_for("main.archive", url=post.url, page=1)}}">{{post.url}}</a></li>
 			<li class="active"><a href="{{url_for("main.post", postid=post.data['id'])}}">#{{post.data['id']}}</a></li>
 			{% endif %}
 		</ul>
