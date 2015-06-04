@@ -13,6 +13,8 @@ from datetime import datetime
 
 blueprint = Blueprint('main', __name__)
 
+POST_TYPES = ['text', 'quote', 'link', 'answer', 'video', 'audio', 'photo', 'chat']
+
 # prettyjson filter
 def prettyjson(data):
     return json.dumps(data, indent=4)
@@ -85,6 +87,7 @@ def archive(url=None, page=1):
 
     page = request.args.get('page', None)
     tag = request.args.get('tag', None)
+    posttype = request.args.get('type', 'all')
 
     if page < 1 or not page:
         return redirect(url_for('main.archive', url=url, page=1))
@@ -95,6 +98,9 @@ def archive(url=None, page=1):
         url_for_page.params.update({"tag": tag})
         # complete tag hack because i have no idea how to filter json arrays with jsonb (lol)
         sql = g.sql.query(Post).filter(Post.url == url).filter(func.lower(Post.data['tags'].cast(TEXT)).contains('"' + tag + '"')).order_by(Post.data['timestamp'].desc())
+    elif posttype in POST_TYPES:
+        url_for_page.params.update({"type": posttype})
+        sql = g.sql.query(Post).filter(Post.url == url).filter(Post.data['type'].astext == posttype).order_by(Post.data['timestamp'].desc())
     else:
         sql = g.sql.query(Post).filter(Post.url == url).order_by(Post.data['timestamp'].desc())
 
@@ -103,5 +109,7 @@ def archive(url=None, page=1):
     return render_template("archive.html",
         url=url,
         posts=posts,
-        tag=tag
+        tag=tag,
+        posttype=posttype,
+        POST_TYPES=POST_TYPES
     )

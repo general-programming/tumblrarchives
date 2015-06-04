@@ -89,7 +89,19 @@
 			</li>
 			<li{% if active_page == "home" %} class="active"{% endif %}><a href="/">Home</a></li>
 			{% if url %}
-			<li class="active"><a href="{{url_for("main.archive", url=url, page=request.args.page)}}">{{url}}</a></li>
+			<ul class="collapsible collapsible-accordion">
+				<li>
+					<a class="collapsible-header waves-effect waves-teal">{{url}}<i class="mdi-navigation-menu"></i></a>
+					<div class="collapsible-body">
+						<ul>
+							<li {% if posttype == 'all' %}class="active"{% endif %}><a href="{{url_for("main.archive", url=url, page=request.args.page)}}">All</a></li>
+							{% for typ in POST_TYPES %}
+							<li {% if posttype == typ %}class="active"{% endif %}><a href="{{url_for("main.archive", url=url, page=request.args.page, type=typ)}}">{{typ|capitalize}}</a></li>
+							{% endfor %}
+						</ul>
+					</div>
+				</li>
+			</ul>
 			{% endif %}
 			{% if post %}
 			<li><a href="{{url_for("main.archive", url=post.url, page=1)}}">{{post.url}}</a></li>
@@ -119,6 +131,7 @@
 	<div class="footer-copyright">
 		<div class="container">
 			coded by <a href="http://eggyeggegg.tumblr.com">@eggyeggegg</a>
+			<p> contact me to archive a blog </p>
 		</div>
 	</div>
 </footer>
@@ -126,7 +139,7 @@
 	<!-- Scripts -->
 	<script src="/static/js/jquery.min.js?1"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.96.1/js/materialize.min.js"></script>
-	<script src="/static/js/main.js?1"></script>
+	<script src="/static/js/main.js?2"></script>
 
 </body>
 </html>
