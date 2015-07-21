@@ -5,6 +5,9 @@ from archives.views import main
 
 app = Flask(__name__)
 
+# Throw tracebacks to console
+app.config['PROPAGATE_EXCEPTIONS'] = True
+
 # Request handlers
 app.before_request(connect_sql)
 app.before_request(before_request)

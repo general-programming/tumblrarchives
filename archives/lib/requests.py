@@ -11,6 +11,8 @@ def before_request():
     g.blogcount = g.sql.query(func.count(func.distinct(Post.url))).scalar()
 
 def disconnect_sql(result=None):
-    g.sql.close()
-    del g.sql
+    if hasattr(g, "sql"):
+        g.sql.close()
+        del g.sql
+
     return result
