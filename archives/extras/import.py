@@ -62,3 +62,5 @@ for offset in xrange(0, info['blog']['posts'] + 20, 20):
     print "%s/%s" % (offset, info['blog']['posts'])
     print "-"*60
     time.sleep(0.5)
+
+sql.close()
