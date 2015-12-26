@@ -31,6 +31,10 @@
 	</div>
 	{% endif %}
 
+	{% if post.data['video_url'] %}
+	<video src="{{post.data['video_url']}}" preload="none" {% if post.data['thumbnail_url'] %}poster="{{post.data['thumbnail_url']}}"{% endif %} controls></video>
+	{% endif %}
+
 	{% if post.data['description'] %}
 	<div class="post_description"> {{post.data['description']|safe}} </div> 
 	{% endif %}
@@ -41,10 +45,6 @@
 
 	{% if post.data['caption'] %}
 	<div class="post_caption"> {{post.data['caption']|safe}} </div> 
-	{% endif %}
-
-	{% if post.data['video_url'] %}
-	<video src="{{post.data['video_url']}}" preload="none" {% if post.data['thumbnail_url'] %}poster="{{post.data['thumbnail_url']}}"{% endif %} controls></video>
 	{% endif %}
 
 	<div class="bottom">
