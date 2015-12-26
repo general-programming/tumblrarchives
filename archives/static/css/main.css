@@ -115,3 +115,7 @@ header, main, footer {
 	}
 }
 
+.responsive-video {
+	margin: 0 auto;
+	display: block;
+}
