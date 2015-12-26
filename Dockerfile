@@ -21,3 +21,6 @@ RUN python setup.py install
 
 # Expose web port
 EXPOSE 5000
+
+# Command
+CMD ["gunicorn", "-b", "0.0.0.0:5000", "-k", "gevent", "-w", "4", "archives:app"]
