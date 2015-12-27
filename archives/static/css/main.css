@@ -105,6 +105,11 @@ li.logo:hover {
 	background-color: transparent;
 }
 
+nav .logo i {
+	font-size: 6rem;
+	display: inline-block;
+}
+
 .bottom {
 	margin-top: 15px;
 }
