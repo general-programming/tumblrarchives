@@ -20,4 +20,6 @@ $(document).ready(function() {
 	}
 
 	$(".post img").addClass("responsive-img");
+
+	hljs.initHighlightingOnLoad();
 });
