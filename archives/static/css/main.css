@@ -43,6 +43,10 @@ pre.code {
 	word-wrap: break-word;
 }
 
+.post p {
+	margin: 10px 0;
+}
+
 .askinfo {
 	font-size: 1.5rem;
 }
@@ -99,6 +103,10 @@ li.logo {
 
 li.logo:hover {
 	background-color: transparent;
+}
+
+.bottom {
+	margin-top: 15px;
 }
 
 .bottom .btn-floating {
