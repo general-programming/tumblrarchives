@@ -111,6 +111,9 @@ li.logo:hover {
 
 .bottom .btn-floating {
 	margin: 0.5em;
+    position: absolute;
+    right: 5px;
+    bottom: 5px;
 }
 
 header, main, footer {
