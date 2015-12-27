@@ -10,7 +10,7 @@ var haslocalStorage = (function() {
 })();
 
 $(document).ready(function() {
-	$(".button-collapse").sideNav({'edge': 'left', closeOnClick: true});
+	$(".button-collapse").sideNav({'edge': 'left'});
 
 	if (haslocalStorage) {
 		if (localStorage.getItem("debug") === "on") {
