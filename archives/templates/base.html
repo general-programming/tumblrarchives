@@ -86,34 +86,34 @@
 				<span class="brand-section">Archives</span>
 			</ul>
 		</div>
-
-		<!-- Collect the nav links, forms, and other content for toggling -->
-		<ul id="nav-mobile" class="side-nav fixed">
-			<li class="logo">
-				<i class="mdi-content-archive large green-text"></i>
-			</li>
-			<li{% if active_page == "home" %} class="active"{% endif %}><a href="/">Home</a></li>
-			{% if url %}
-			<ul class="collapsible collapsible-accordion">
-				<li>
-					<a class="collapsible-header waves-effect waves-teal">{{url}}<i class="mdi-navigation-menu"></i></a>
-					<div class="collapsible-body">
-						<ul>
-							<li {% if posttype == 'all' %}class="active"{% endif %}><a href="{{url_for("main.archive", url=url, page=request.args.page)}}">All</a></li>
-							{% for typ in POST_TYPES %}
-							<li {% if posttype == typ %}class="active"{% endif %}><a href="{{url_for("main.archive", url=url, page=request.args.page, type=typ)}}">{{typ|capitalize}}</a></li>
-							{% endfor %}
-						</ul>
-					</div>
-				</li>
-			</ul>
-			{% endif %}
-			{% if post %}
-			<li><a href="{{url_for("main.archive", url=post.url, page=1)}}">{{post.url}}</a></li>
-			<li class="active"><a href="{{url_for("main.post", postid=post.data['id'])}}">#{{post.data['id']}}</a></li>
-			{% endif %}
-		</ul>
 	</nav>
+
+	<!-- Collect the nav links, forms, and other content for toggling -->
+	<ul id="nav-mobile" class="side-nav fixed">
+		<li class="logo">
+			<i class="mdi-content-archive large green-text"></i>
+		</li>
+		<li{% if active_page == "home" %} class="active"{% endif %}><a href="/">Home</a></li>
+		{% if url %}
+		<ul class="collapsible collapsible-accordion">
+			<li>
+				<a class="collapsible-header waves-effect waves-teal">{{url}}<i class="mdi-navigation-menu"></i></a>
+				<div class="collapsible-body">
+					<ul>
+						<li {% if posttype == 'all' %}class="active"{% endif %}><a href="{{url_for("main.archive", url=url, page=request.args.page)}}">All</a></li>
+						{% for typ in POST_TYPES %}
+						<li {% if posttype == typ %}class="active"{% endif %}><a href="{{url_for("main.archive", url=url, page=request.args.page, type=typ)}}">{{typ|capitalize}}</a></li>
+						{% endfor %}
+					</ul>
+				</div>
+			</li>
+		</ul>
+		{% endif %}
+		{% if post %}
+		<li><a href="{{url_for("main.archive", url=post.url, page=1)}}">{{post.url}}</a></li>
+		<li class="active"><a href="{{url_for("main.post", postid=post.data['id'])}}">#{{post.data['id']}}</a></li>
+		{% endif %}
+	</ul>
 </header>
 
 <main>
