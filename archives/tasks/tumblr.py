@@ -26,7 +26,7 @@ def add_post(url, blob):
 
     if redis.sismember("cache:pids:" + url, blob["id"]):
         redis.incr("cache:bad:" + url)
-        redis.expire("cache:bad:" + url, 5)
+        redis.expire("cache:bad:" + url, 15)
         return {"status": "Post %s in database." % (blob["id"])}
 
     try:
@@ -41,7 +41,7 @@ def add_post(url, blob):
         db.rollback()
 
 @celery.task(base=WorkerTask)
-def archive_blog(url=None, begin=0, posts=0):
+def archive_blog(url=None, begin=0, totalposts=0):
     if not url:
         raise ValueError("Blog URL parameter is missing.")
 
@@ -59,20 +59,20 @@ def archive_blog(url=None, begin=0, posts=0):
 
     # Set the counter of total blog posts.
     try:
-        if posts == 0:
-            posts = tumblr.blog_info(url)["blog"]["posts"]
+        if totalposts == 0:
+            totalposts = tumblr.blog_info(url)["blog"]["posts"]
     except KeyError:
         raise Reject("Could not get number of posts. Data: %s" % tumblr.blog_info(url))
     except Exception as e:
         archive_blog.retry(exc=e, countdown=60)
 
     # Start the get posts tasks.
-    for offset in xrange(begin, posts + 20, 20):
+    for offset in xrange(begin, totalposts + 20, 20):
         try:
             posts = tumblr.posts(url+".tumblr.com", offset=offset)['posts']
-            archive_blog.apply_async((url, offset, posts), countdown=1)
+            archive_blog.apply_async((url, offset, totalposts), countdown=1)
         except Exception as e:
-            archive_blog.retry((url, offset, posts), exc=e, countdown=15)
+            archive_blog.retry((url, offset, totalposts), exc=e, countdown=15)
 
         for post in posts:
             add_post.delay(url, post)
