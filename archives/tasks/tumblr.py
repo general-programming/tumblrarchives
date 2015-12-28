@@ -71,7 +71,6 @@ def archive_blog(url=None, offset=0, totalposts=0):
     # Get the posts
     try:
         posts = tumblr.posts(url+".tumblr.com", offset=offset)['posts']
-        archive_blog.apply_async((url, offset, totalposts), eta=datetime.now() + timedelta(seconds=1))
     except Exception as e:
         archive_blog.retry((url, offset, totalposts), exc=e, eta=datetime.now() + timedelta(seconds=15))
 
