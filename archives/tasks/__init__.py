@@ -1,22 +1,18 @@
 import os
+import pytumblr
+
 from celery import Celery, Task
 from classtools import reify
-from redis import ConnectionPool, StrictRedis
+from redis import StrictRedis
 
 from archives.lib.model import sm
+from archives.lib.requests import redis_pool
 
 celery = Celery("archives", include=[
-    "archives.tasks.background",
+    "archives.tasks.tumblr",
 ])
 
 celery.config_from_object('archives.tasks.config')
-
-redis_pool = ConnectionPool(
-    host=os.environ.get('REDIS_PORT_6379_TCP_ADDR', os.environ.get('REDIS_HOST', '127.0.0.1')),
-    port=int(os.environ.get('REDIS_PORT_6379_TCP_PORT', os.environ.get('REDIS_PORT', 6379))),
-    db=int(os.environ.get('REDIS_DB', 0)),
-    decode_responses=True
-)
 
 class WorkerTask(Task):
     abstract = True
@@ -28,6 +24,13 @@ class WorkerTask(Task):
     @reify
     def redis(self):
         return StrictRedis(connection_pool=redis_pool)
+
+    @reify
+    def tumblr_client(self):
+        return pytumblr.TumblrRestClient(
+            os.environ.get("TUMBLR_CONSUMER_KEY"),
+            os.environ.get("TUMBLR_CONSUMER_SECRET")
+        )
 
     def after_return(self, *args, **kwargs):
         if hasattr(self, "db"):
