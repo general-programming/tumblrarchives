@@ -100,10 +100,10 @@
 		<li class="logo">
 			<i class="mdi-content-archive large green-text"></i>
 		</li>
-		<li{% if active_page == "home" %} class="active"{% endif %}><a href="/">Home</a></li>
+		<li class="bold{% if active_page == "home" %} active{% endif %}"><a href="/">Home</a></li>
 		{% if url %}
 		<ul class="collapsible collapsible-accordion">
-			<li>
+			<li class="bold">
 				<a class="collapsible-header">{{url}}</a>
 				<div class="collapsible-body">
 					<ul>
