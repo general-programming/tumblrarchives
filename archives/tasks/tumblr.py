@@ -41,7 +41,7 @@ def add_post(url, blob):
         db.rollback()
 
 @celery.task(base=WorkerTask)
-def archive_blog(url=None, begin=0, totalposts=0):
+def archive_blog(url=None, offset=0, totalposts=0):
     if not url:
         raise ValueError("Blog URL parameter is missing.")
 
@@ -66,13 +66,16 @@ def archive_blog(url=None, begin=0, totalposts=0):
     except Exception as e:
         archive_blog.retry(exc=e, countdown=60)
 
-    # Start the get posts tasks.
-    for offset in xrange(begin, totalposts + 20, 20):
-        try:
-            posts = tumblr.posts(url+".tumblr.com", offset=offset)['posts']
-            archive_blog.apply_async((url, offset, totalposts), countdown=1)
-        except Exception as e:
-            archive_blog.retry((url, offset, totalposts), exc=e, countdown=15)
+    # Get the posts
+    try:
+        posts = tumblr.posts(url+".tumblr.com", offset=offset)['posts']
+        archive_blog.apply_async((url, offset, totalposts), countdown=1)
+    except Exception as e:
+        archive_blog.retry((url, offset, totalposts), exc=e, countdown=15)
 
-        for post in posts:
-            add_post.delay(url, post)
+    # Archive posts
+    for post in posts:
+        add_post.delay(url, post)
+
+    # Start the next task.
+    archive_blog.apply_async((url, offset + 20, totalposts), countdown=1)
