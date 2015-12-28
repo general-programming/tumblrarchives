@@ -1,13 +1,21 @@
 import os
-from datetime import timedelta
+
+from archives.lib.requests import redis_pool
 
 # Debug
 if 'DEBUG' in os.environ:
     CELERY_REDIRECT_STDOUTS_LEVEL = "DEBUG"
 
 # Broker and Result backends
-BROKER_URL = os.environ.get("CELERY_BROKER", "redis://localhost/0")
-CELERY_RESULT_BACKEND = os.environ.get("CELERY_RESULT", "redis://localhost/0")
+BROKER_URL = os.environ.get("CELERY_BROKER", "redis://%s:%s/0" % (
+    redis_pool.connection_kwargs["host"],
+    redis_pool.connection_kwargs["port"]
+))
+
+CELERY_RESULT_BACKEND = os.environ.get("CELERY_RESULT", "redis://%s:%s/0" % (
+    redis_pool.connection_kwargs["host"],
+    redis_pool.connection_kwargs["port"]
+))
 
 # Time
 CELERY_TIMEZONE = "UTC"
