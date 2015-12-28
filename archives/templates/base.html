@@ -104,7 +104,7 @@
 		{% if url %}
 		<ul class="collapsible collapsible-accordion">
 			<li>
-				<a class="collapsible-header">{{url}}<i class="mdi-navigation-menu"></i></a>
+				<a class="collapsible-header">{{url}}</a>
 				<div class="collapsible-body">
 					<ul>
 						<li {% if posttype == 'all' %}class="active"{% endif %}><a href="{{url_for("main.archive", url=url, page=request.args.page)}}">All</a></li>
