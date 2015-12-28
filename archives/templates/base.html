@@ -35,6 +35,13 @@
 	<video class="responsive-video" src="{{post.data['video_url']}}" preload="none" {% if post.data['thumbnail_url'] %}poster="{{post.data['thumbnail_url']}}"{% endif %} controls></video>
 	{% endif %}
 
+	{% if post.data['text']}
+	<blockquote>
+		<p>{{post.data['text'|safe]}}</p>
+		{% if post.data['source'] %}<cite>{{post.data['source']}}</cite>{% endif %}
+	</blockquote>
+	{% endif %}
+
 	{% if post.data['description'] %}
 	<div class="post_description"> {{post.data['description']|safe}} </div> 
 	{% endif %}

@@ -135,3 +135,11 @@ header, main, footer {
 	margin: 0 auto;
 	display: block;
 }
+
+cite {
+	color: #777;
+}
+
+cite:before {
+	content: '\2014 \00A0';
+}
