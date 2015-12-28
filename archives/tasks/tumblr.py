@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta
+
 from celery.exceptions import Retry, Reject
 from celery.utils.log import get_task_logger
 from sqlalchemy.exc import IntegrityError
@@ -64,18 +66,18 @@ def archive_blog(url=None, offset=0, totalposts=0):
     except KeyError:
         raise Reject("Could not get number of posts. Data: %s" % tumblr.blog_info(url))
     except Exception as e:
-        archive_blog.retry(exc=e, countdown=60)
+        archive_blog.retry(exc=e, eta=datetime.now() + timedelta(minutes=1))
 
     # Get the posts
     try:
         posts = tumblr.posts(url+".tumblr.com", offset=offset)['posts']
-        archive_blog.apply_async((url, offset, totalposts), countdown=1)
+        archive_blog.apply_async((url, offset, totalposts), eta=datetime.now() + timedelta(seconds=1))
     except Exception as e:
-        archive_blog.retry((url, offset, totalposts), exc=e, countdown=15)
+        archive_blog.retry((url, offset, totalposts), exc=e, eta=datetime.now() + timedelta(seconds=15))
 
     # Archive posts
     for post in posts:
         add_post.delay(url, post)
 
     # Start the next task.
-    archive_blog.apply_async((url, offset + 20, totalposts), countdown=1)
+    archive_blog.apply_async((url, offset + 20, totalposts), eta=datetime.now() + timedelta(seconds=1))
