@@ -94,17 +94,17 @@ def archive(url=None, page=1):
 
     url_for_page = PageURL(url_for("main.archive", url=url), {"page": page})
 
+    sql = g.sql.query(Post).filter(Post.url == url)
+
     if tag:
         url_for_page.params.update({"tag": tag})
         # complete tag hack because i have no idea how to filter json arrays with jsonb (lol)
-        sql = g.sql.query(Post).filter(Post.url == url).filter(func.lower(Post.data['tags'].cast(TEXT)).contains('"' + tag + '"')).order_by(Post.data['timestamp'].desc())
+        sql = sql.filter(func.lower(Post.data['tags'].cast(TEXT)).contains('"' + tag + '"'))
     elif posttype in POST_TYPES:
         url_for_page.params.update({"type": posttype})
-        sql = g.sql.query(Post).filter(Post.url == url).filter(Post.data['type'].astext == posttype).order_by(Post.data['timestamp'].desc())
-    else:
-        sql = g.sql.query(Post).filter(Post.url == url).order_by(Post.data['timestamp'].desc())
+        sql = sql.filter(Post.data['type'].astext == posttype)
 
-    posts = Page(sql, items_per_page=15, page=page, url=url_for_page)
+    posts = Page(sql.order_by(Post.data['timestamp'].desc()), items_per_page=15, page=page, url=url_for_page)
 
     return render_template("archive.html",
         url=url,
