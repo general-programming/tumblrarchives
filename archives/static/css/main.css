@@ -143,3 +143,12 @@ cite {
 cite:before {
 	content: '\2014 \00A0';
 }
+
+ul.side-nav.fixed li {
+	line-height: 40px;
+}
+
+ul.side-nav.fixed li a {
+	line-height: 40px;
+	height: 40px;
+}
