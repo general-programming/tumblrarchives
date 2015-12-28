@@ -26,7 +26,7 @@ def add_post(url, blob):
 
     if redis.sismember("cache:pids:" + url, blob["id"]):
         redis.incr("cache:bad:" + url)
-        redis.expire("cache:bad:" + url, 15)
+        redis.expire("cache:bad:" + url, 60)
         return {"status": "Post %s in database." % (blob["id"])}
 
     try:
