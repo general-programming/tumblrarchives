@@ -156,3 +156,7 @@ ul.side-nav.fixed li a {
 .bold>a {
 	font-weight: bold;
 }
+
+.chat li {
+	margin: 5px 0;
+}
