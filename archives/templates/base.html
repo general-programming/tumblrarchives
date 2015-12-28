@@ -46,7 +46,13 @@
 	<div class="post_description"> {{post.data['description']|safe}} </div> 
 	{% endif %}
 
-	{% if post.data['body'] %}
+	{% if post.data['dialogue'] %}
+	<ul class="chat">
+	{% for line in post.data['dialogue'] %}
+		<li><strong>{{line['label']}}</strong> {{line.phrase}}</li>
+	{% endfor %}
+	</ul>
+	{% elif post.data['body'] %}
 	<div class="post_body"> {{post.data['body']|safe}} </div> 
 	{% endif %}
 
