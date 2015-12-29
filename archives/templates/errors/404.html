@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% set active_page = "404" %}
+{% set breadcrumb = "404 Not Found" %}
+
+{% block content %}
+<div class="container">
+	<div class="row">
+		<div class="col s12">
+			<div class="card">
+				<span class="card-title black-text"> 404 Not Found </span>
+				<p>The URL "{{request.url}}" does not exist.</p>
+				<p>If you entered the URL manually please check your spelling and try again.</p>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% set active_page = "500" %}
+{% set breadcrumb = "Internal Server Error" %}
+
+{% block content %}
+<div class="container">
+	<div class="row">
+		<div class="col s12">
+			<div class="card">
+				<span class="card-title black-text"> It broke. </span>
+				<p>Something broke on our end and this request could not be completed. Please try again and your request might work again. You should probarly complain to <a href="http://blog.skeleton.army/ask">nepeat</a> for this one.</p>
+				{% if traceback %}
+				<pre class="hljs code"> 
+					<span class="codeinfo">Error</span>
+					<code>{{traceback}}</code>
+				</pre>
+				<label>This block of code will help debugging the issue. Please include link this inside your bug ask as a pastebin link for a gold star. :o</label>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
