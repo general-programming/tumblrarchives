@@ -1,15 +1,32 @@
-html {
+html, body {
 	font-size: 14px;
+	height: 100%
 }
 
-#frontcard,
+.wrapper {
+	position: relative;
+	min-height: 100%;
+	padding-bottom: 175px;
+}
+
+footer {
+	position: absolute;
+	bottom: 0;
+	width: 100%
+}
+
+.card,
 .askinfo,
 .debug h2 {
 	padding: 1rem;
 }
 
-#fronttitle {
-	font-size: 4rem;
+.card {
+	margin-top: 25px;
+}
+
+.card .card-title {
+	font-size: 2.92rem;
 }
 
 .code {
