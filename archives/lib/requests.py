@@ -2,7 +2,7 @@
 import os
 
 from flask import g, request, current_app
-from redis import ConnectionPool
+from redis import StrictRedis, ConnectionPool
 from sqlalchemy import func
 
 from archives.lib.model import sm, Post
@@ -17,6 +17,9 @@ redis_pool = ConnectionPool(
 def connect_sql():
     g.sql = sm()
 
+def connect_redis():
+    g.redis = StrictRedis(connection_pool=redis_pool)
+
 def before_request():
     g.rowcount = g.sql.query(func.count(Post.id)).scalar()
 
@@ -24,6 +27,12 @@ def disconnect_sql(result=None):
     if hasattr(g, "sql"):
         g.sql.close()
         del g.sql
+
+    return result
+
+def disconnect_redis(result=None):
+    if hasattr(g, "redis"):
+        del g.redis
 
     return result
 
