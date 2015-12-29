@@ -6,6 +6,9 @@ RUN echo "http://alpine.gliderlabs.com/alpine/edge/testing" >> /etc/apk/reposito
 # Update packages and install setup requirements.
 RUN apk --update add python python-dev py-pip py-flask py-gevent py-gunicorn py-httplib2 py-sqlalchemy py-psycopg2 py-oauth2 py-mako gcc musl-dev postgresql-dev
 
+# Install the SSL root certificates.
+RUN apk-install -X ca-certificates
+
 # Set WORKDIR to /src
 WORKDIR /src
 
