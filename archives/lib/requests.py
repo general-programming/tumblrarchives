@@ -1,7 +1,8 @@
 # This Python file uses the following encoding: utf-8
 import os
+import uuid
 
-from flask import g, request, current_app
+from flask import g, request, current_app, abort
 from redis import StrictRedis, ConnectionPool
 from sqlalchemy import func
 
@@ -14,11 +15,51 @@ redis_pool = ConnectionPool(
     decode_responses=True
 )
 
+def set_cookie(response):
+    if "archives" not in request.cookies:
+        response.set_cookie(
+            "archives",
+            g.session_id,
+            max_age=365 * 24 * 60 * 60,
+            httponly=True,
+        )
+    return response
+
+
+def check_csrf_token():
+    # Check CSRF only for POST requests.
+    if request.method != "POST":
+        return
+
+    # Ignore CSRF only for local debugging.
+    if 'NOCSRF' in os.environ:
+        return
+
+    token = g.redis.hget("session:%s" % g.session_id, "csrf")
+    if "token" in request.form and request.form["token"] == token:
+        return
+    abort(403)
+
 def connect_sql():
     g.sql = sm()
 
 def connect_redis():
     g.redis = StrictRedis(connection_pool=redis_pool)
+
+    if "archives" in request.cookies:
+        g.session_id = request.cookies["archives"]
+        g.user_data = g.redis.hgetall("session:" + g.session_id)
+        if g.user_data is not None:
+            g.user_data = {}
+    else:
+        g.session_id = str(uuid.uuid4())
+        g.user_id = None
+
+    g.csrf_token = g.redis.hget("session:%s" % g.session_id, "csrf")
+    if g.csrf_token is None:
+        g.csrf_token = str(uuid.uuid4())
+        g.redis.hset("session:%s" % g.session_id, "csrf", g.csrf_token)
+        g.redis.expire("session:%s" % g.session_id, 3600)
 
 def before_request():
     g.rowcount = g.sql.query(func.count(Post.id)).scalar()
