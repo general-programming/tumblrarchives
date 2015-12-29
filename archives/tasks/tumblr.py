@@ -21,6 +21,14 @@ def cache_ids(redis, db, url):
     pipeline.expire("cache:pids:" + url, 600)  # 600 seconds = 10 minutes
     pipeline.execute()
 
+def check_ratelimit(redis, key, max_hits=60, expire=60):
+    attempts = redis.incr(key)
+
+    if attempts >= max_hits:
+        raise Retry("API rate limit. %s hits for %s." % (attempts, key))
+    else:
+        redis.expire(key, expire)
+
 @celery.task(base=WorkerTask)
 def add_post(url, blob):
     redis = add_post.redis
@@ -56,6 +64,8 @@ def archive_post(url=None, post_id=None):
     if redis.sismember("cache:pids:" + url, post_id):
         return {"error": "Post %s in database." % (post_id)}
 
+    check_ratelimit(redis, "api_access")
+
     add_post.delay(url, tumblr.posts(url, id=post_id)["posts"][0])
 
 @celery.task(base=WorkerTask)
@@ -74,6 +84,9 @@ def archive_blog(url=None, offset=0, totalposts=0):
             return {"status": "done"}
     except (TypeError, ValueError):
         pass
+
+    # Check if we can access the API.
+    check_ratelimit(redis, "api_access")
 
     # Set the counter of total blog posts.
     try:
