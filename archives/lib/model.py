@@ -3,6 +3,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String
+from sqlalchemy.schema import Index
 from sqlalchemy.dialects.postgresql import JSONB
 
 import os
@@ -28,3 +29,6 @@ class Post(Base):
     id = Column(Integer, primary_key=True)
     url = Column(String(200))
     data = Column(JSONB, nullable=False)
+
+# Index for querying by url.
+Index("index_post_url", Post.url)
