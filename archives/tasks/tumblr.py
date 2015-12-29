@@ -56,7 +56,7 @@ def archive_post(url=None, post_id=None):
     if redis.sismember("cache:pids:" + url, post_id):
         return {"error": "Post %s in database." % (post_id)}
 
-    add_post.delay(url, tumblr.posts(url, id=post_id)["posts"])
+    add_post.delay(url, tumblr.posts(url, id=post_id)["posts"][0])
 
 @celery.task(base=WorkerTask)
 def archive_blog(url=None, offset=0, totalposts=0):
