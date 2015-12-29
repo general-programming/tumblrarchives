@@ -94,10 +94,11 @@
 				<i class="mdi-navigation-menu"></i>
 			</a>
 		</ul>
-		<div class="nav-wrapper">
-			<ul class="brand-logo center">
-				<span class="brand-section">Archives</span>
-			</ul>
+		<div class="nav-wrapper center">
+			<div class="col s12">
+				<a href="/" class="breadcrumb">Home</a>
+				{% if active_page != "home" %}<a href="{{request.path}}" class="breadcrumb">{{breadcrumb}}</a>{% endif %}
+			</div>
 		</div>
 	</nav>
 
