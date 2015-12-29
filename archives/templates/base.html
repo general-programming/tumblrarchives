@@ -166,7 +166,7 @@
 	<script src="{{url_for("static", filename="js/main.js")}}"></script>
 	{% if toast %}
 	<script>
-	Materialize.toast('{{toast|safe}}', 30000)
+	Materialize.toast('<span>{{toast|safe}}</span>', 30000)
 	</script>
 	{% endif %}
 
