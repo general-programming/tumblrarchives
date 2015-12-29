@@ -27,6 +27,9 @@ def set_cookie(response):
 
 
 def check_csrf_token():
+    if request.endpoint == "static":
+        return
+
     # Check CSRF only for POST requests.
     if request.method != "POST":
         return
@@ -41,9 +44,15 @@ def check_csrf_token():
     abort(403)
 
 def connect_sql():
+    if request.endpoint == "static":
+        return
+
     g.sql = sm()
 
 def connect_redis():
+    if request.endpoint == "static":
+        return
+
     g.redis = StrictRedis(connection_pool=redis_pool)
 
     if "archives" in request.cookies:
@@ -62,6 +71,9 @@ def connect_redis():
         g.redis.expire("session:%s" % g.session_id, 3600)
 
 def before_request():
+    if request.endpoint == "static":
+        return
+
     g.rowcount = g.sql.query(func.count(Post.id)).scalar()
 
 def disconnect_sql(result=None):
