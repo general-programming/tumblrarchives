@@ -19,7 +19,6 @@ def connect_sql():
 
 def before_request():
     g.rowcount = g.sql.query(func.count(Post.id)).scalar()
-    g.blogcount = g.sql.query(func.count(func.distinct(Post.url))).scalar()
 
 def disconnect_sql(result=None):
     if hasattr(g, "sql"):
