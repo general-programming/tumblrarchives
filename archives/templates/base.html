@@ -164,6 +164,11 @@
 	<script src="{{url_for("static", filename="js/materialize.min.js")}}"></script>
 	<script src="{{url_for("static", filename="js/highlight.pack.js")}}"></script>
 	<script src="{{url_for("static", filename="js/main.js")}}"></script>
+	{% if toast %}
+	<script>
+	Materialize.toast('{{toast|safe}}', 30000)
+	</script>
+	{% endif %}
 
 </body>
 </html>

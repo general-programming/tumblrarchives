@@ -10,8 +10,8 @@ def parse_tumblr_url(url=None):
 
     if matches:
         return {
-            "url": matches.group(0),
-            "post_id": matches.group(1)
+            "url": matches.group(1),
+            "post_id": matches.group(2)
         }
 
     return None

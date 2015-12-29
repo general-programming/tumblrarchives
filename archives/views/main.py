@@ -71,11 +71,13 @@ def front():
 
 @blueprint.route("/submit", methods=["GET", "POST"])
 def submit():
-    if 'url' in request.form:
-        parsed = parse_tumblr_url(request.form["url"])
-        return str(parsed)
+    parsed = parse_tumblr_url(request.form.get("url", ""))
+    toast = ""
 
-    return render_template("submit.html")
+    if parsed:
+        toast = 'Your post has been archived <a href="%s"> here</a>.' % (url_for("main.post", postid=parsed["post_id"]))
+
+    return render_template("submit.html", toast=toast)
 
 @blueprint.route("/post/<postid>")
 def post(postid=None):
