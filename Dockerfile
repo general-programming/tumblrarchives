@@ -1,4 +1,4 @@
-FROM gliderlabs/alpine:edge
+FROM gliderlabs/alpine:3.3
 
 # Enable testing
 RUN echo "http://alpine.gliderlabs.com/alpine/edge/testing" >> /etc/apk/repositories
