@@ -26,6 +26,8 @@ def submit():
     if parsed:
         archive_post.delay(parsed["url"], parsed["post_id"])
         toast = 'Your post has been archived <a href="%s"> here</a>.' % (url_for("main.post", postid=parsed["post_id"]))
+    elif "url" in request.form:
+        toast = "The post url you have entered is invalid. A valid URL that is accepted is demo.tumblr.com/post/236/it-does-not-matter-how-slow-you-go-so-long-as-you"
 
     return render_template("submit.html", toast=toast)
 
