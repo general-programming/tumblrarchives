@@ -5,8 +5,9 @@ from sqlalchemy import func
 from sqlalchemy.exc import DataError
 from sqlalchemy.orm.exc import NoResultFound
 
-from archives.lib.model import Post
 from archives.lib import Page
+from archives.lib.model import Post
+from archives.lib.helpers import parse_tumblr_url
 
 import json
 from datetime import datetime
@@ -67,6 +68,14 @@ blueprint.add_app_template_filter(prettydate)
 @blueprint.route("/")
 def front():
     return render_template("front.html")
+
+@blueprint.route("/submit", methods=["GET", "POST"])
+def submit():
+    if 'url' in request.form:
+        parsed = parse_tumblr_url(request.form["url"])
+        return str(parsed)
+
+    return render_template("submit.html")
 
 @blueprint.route("/post/<postid>")
 def post(postid=None):

@@ -2,7 +2,7 @@
 <div class="col s12 post card">
 	{% if post.data['title'] %}
 	<div class="post_title">
-		<h2>{% if post.data['url'] %}<a href="{{post.data['url']}}">{% endif %}{{post.data['title']|safe}}{% if post.data['url'] %}</a>{% endif %}</h2>
+		<h3>{% if post.data['url'] %}<a href="{{post.data['url']}}">{% endif %}{{post.data['title']|safe}}{% if post.data['url'] %}</a>{% endif %}</h3>
 	</div>
 	{% endif %}
 
@@ -38,7 +38,7 @@
 	{% if post.data['text'] %}
 	<blockquote>
 		<p>{{post.data['text'|safe]}}</p>
-		{% if post.data['source'] %}<cite>{{post.data['source']}}</cite>{% endif %}
+		{% if post.data['source'] %}<cite>{{post.data['source']|safe}}</cite>{% endif %}
 	</blockquote>
 	{% endif %}
 
@@ -110,6 +110,7 @@
 			<i class="mdi-content-archive large green-text"></i>
 		</li>
 		<li class="bold{% if active_page == "home" %} active{% endif %}"><a href="/">Home</a></li>
+		<li class="bold{% if active_page == "submit" %} active{% endif %}"><a href="/submit">Submit</a></li>
 		{% if url %}
 		<ul class="collapsible collapsible-accordion">
 			<li class="bold">

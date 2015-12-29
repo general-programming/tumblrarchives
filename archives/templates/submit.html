@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% set active_page = "submit" %}
+{% set breadcrumb = "Submit" %}
+
+{% block content %}
+<div class="container">
+	<div class="row">
+		<div class="col s12">
+			<div class="card">
+				<form action="/submit" method="POST">
+					<div class="row">
+						<div class="input-field col s12">
+							<i class="mdi-action-input prefix"></i>
+							<input id="url" type="text" name="url" class="validate">
+							<label for="url">Post URL</label>
+						</div>
+					</div>
+					<div class="row">
+						<div class="input-field col s12">
+							<button class="green btn waves-effect waves-light right" type="submit">Submit
+								<i class="material-icons right">send</i>
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

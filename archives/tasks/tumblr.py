@@ -43,6 +43,22 @@ def add_post(url, blob):
         db.rollback()
 
 @celery.task(base=WorkerTask)
+def archive_post(url=None, post_id=None):
+    if not url or not post_id:
+        raise ValueError("Blog URL parameter is missing.")
+
+    redis = archive_post.redis
+    db = archive_post.db
+    tumblr = archive_post.tumblr_client
+
+    cache_ids(redis, db, url)
+
+    if redis.sismember("cache:pids:" + url, post_id):
+        return {"error": "Post %s in database." % (post_id)}
+
+    add_post.delay(url, tumblr.posts(url, id=post_id)["posts"])
+
+@celery.task(base=WorkerTask)
 def archive_blog(url=None, offset=0, totalposts=0):
     if not url:
         raise ValueError("Blog URL parameter is missing.")
