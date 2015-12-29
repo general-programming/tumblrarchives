@@ -7,6 +7,7 @@ from sqlalchemy.orm.exc import NoResultFound
 
 from archives.lib import Page
 from archives.lib.model import Post
+from archives.tasks.tumblr import archive_post
 from archives.lib.helpers import parse_tumblr_url
 
 import json
@@ -75,6 +76,7 @@ def submit():
     toast = ""
 
     if parsed:
+        archive_post.delay(parsed["url"], parsed["post_id"])
         toast = 'Your post has been archived <a href="%s"> here</a>.' % (url_for("main.post", postid=parsed["post_id"]))
 
     return render_template("submit.html", toast=toast)
