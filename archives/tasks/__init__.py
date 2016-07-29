@@ -1,12 +1,11 @@
 import os
-import pytumblr
 
+import pytumblr
+from archives.lib.model import sm
+from archives.lib.requests import redis_pool
 from celery import Celery, Task
 from classtools import reify
 from redis import StrictRedis
-
-from archives.lib.model import sm
-from archives.lib.requests import redis_pool
 
 celery = Celery("archives", include=[
     "archives.tasks.tumblr",

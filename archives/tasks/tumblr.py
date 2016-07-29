@@ -1,12 +1,10 @@
 from datetime import datetime, timedelta
 
-from celery.exceptions import Retry, Reject
+from archives.lib.model import Post
+from archives.tasks import WorkerTask, celery
+from celery.exceptions import Reject, Retry
 from celery.utils.log import get_task_logger
 from sqlalchemy.exc import IntegrityError
-
-from archives.lib.model import Post
-
-from archives.tasks import celery, WorkerTask
 
 logger = get_task_logger(__name__)
 
@@ -99,7 +97,7 @@ def archive_blog(url=None, offset=0, totalposts=0):
 
     # Get the posts
     try:
-        posts = tumblr.posts(url+".tumblr.com", offset=offset)['posts']
+        posts = tumblr.posts(url + ".tumblr.com", offset=offset)['posts']
     except Exception as e:
         archive_blog.retry((url, offset, totalposts), exc=e, eta=datetime.now() + timedelta(seconds=15))
 

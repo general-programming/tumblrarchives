@@ -1,7 +1,9 @@
 # This Python file uses the following encoding: utf-8
 import re
+
 from webhelpers import paginate
 from webhelpers.html import HTML
+
 
 # Pagination class credit https://github.com/ckan/ckan/blob/fd4d60c64a28801ed1dea76f353f8f6ee9f74d45/ckan/lib/helpers.py#L890-L925
 

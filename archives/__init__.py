@@ -2,10 +2,13 @@
 import os
 import traceback
 
-from flask import Flask, request, render_template
-from archives.lib.requests import set_cookie, check_csrf_token, connect_sql, connect_redis, before_request, disconnect_sql, disconnect_redis, cache_breaker
-from archives.views import main
 from archives.lib.extensions import inject_extensions
+from archives.lib.requests import (before_request, cache_breaker,
+                                   check_csrf_token, connect_redis,
+                                   connect_sql, disconnect_redis,
+                                   disconnect_sql, set_cookie)
+from archives.views import main
+from flask import Flask, render_template, request
 
 app = Flask(__name__)
 

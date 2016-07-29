@@ -2,10 +2,9 @@
 import os
 import uuid
 
-from flask import g, request, current_app, abort
-from redis import StrictRedis, ConnectionPool
-
 from archives.lib.model import sm
+from flask import abort, current_app, g, request
+from redis import ConnectionPool, StrictRedis
 
 redis_pool = ConnectionPool(
     host=os.environ.get('REDIS_PORT_6379_TCP_ADDR', os.environ.get('REDIS_HOST', '127.0.0.1')),

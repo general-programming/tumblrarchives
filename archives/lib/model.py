@@ -1,12 +1,11 @@
 # This Python file uses the following encoding: utf-8
-from sqlalchemy import create_engine
-from sqlalchemy.orm import scoped_session, sessionmaker
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String
-from sqlalchemy.schema import Index
-from sqlalchemy.dialects.postgresql import JSONB
-
 import os
+
+from sqlalchemy import Column, Integer, String, create_engine
+from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import scoped_session, sessionmaker
+from sqlalchemy.schema import Index
 
 debug = os.environ.get('DEBUG', False)
 

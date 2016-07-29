@@ -1,7 +1,8 @@
-from datetime import datetime
 import json
+from datetime import datetime
 
-from flask import g, Markup
+from flask import Markup, g
+
 
 # Filters
 def prettyjson(data):

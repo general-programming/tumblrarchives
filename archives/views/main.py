@@ -1,14 +1,14 @@
-from webhelpers.paginate import PageURL
-from flask import Blueprint, request, render_template, g, url_for, jsonify, redirect
-from sqlalchemy.dialects.postgresql import TEXT
-from sqlalchemy import func
-from sqlalchemy.exc import DataError
-from sqlalchemy.orm.exc import NoResultFound
-
 from archives.lib import Page
+from archives.lib.helpers import parse_tumblr_url
 from archives.lib.model import Post
 from archives.tasks.tumblr import archive_post
-from archives.lib.helpers import parse_tumblr_url
+from flask import (Blueprint, g, jsonify, redirect, render_template, request,
+                   url_for)
+from sqlalchemy import func
+from sqlalchemy.dialects.postgresql import TEXT
+from sqlalchemy.exc import DataError
+from sqlalchemy.orm.exc import NoResultFound
+from webhelpers.paginate import PageURL
 
 blueprint = Blueprint('main', __name__)
 
@@ -69,7 +69,8 @@ def archive(url=None, page=1):
 
     posts = Page(sql.order_by(Post.data['timestamp'].desc()), items_per_page=15, page=page, url=url_for_page)
 
-    return render_template("archive.html",
+    return render_template(
+        "archive.html",
         url=url,
         posts=posts,
         tag=tag,

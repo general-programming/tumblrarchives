@@ -1,8 +1,9 @@
-import sys
 import os
-import pytumblr
+import sys
 import time
-from archives.lib.model import sm, Post
+
+import pytumblr
+from archives.lib.model import Post, sm
 from sqlalchemy.exc import IntegrityError
 
 sql = sm()
