@@ -52,16 +52,13 @@ for offset in xrange(0, info['blog']['posts'] + 20, 20):
         print "All posts crawled. (Probarly)"
         break
 
-    posts = client.posts(blog.url+".tumblr.com", offset=offset)['posts']
+    posts = client.posts(blog.url + ".tumblr.com", offset=offset)['posts']
     for post in posts:
         status = blog.add(post)
         if status == "indb":
             bad += 1
             continue
-        print post
-        print "-"*60
     print "%s/%s" % (offset, info['blog']['posts'])
-    print "-"*60
-    time.sleep(0.5)
+    time.sleep(0.25)
 
 sql.close()
