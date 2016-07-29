@@ -11,3 +11,21 @@ services:
       REDIS_HOST: redis
       REDIS_PORT: 6379
     env_file: .env
+
+  celery:
+    build: .
+    restart: always
+    command: "celery -A archives.tasks worker -P gevent --autoscale=4,1"
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    env_file: .env
+    
+  flower:
+    build: .
+    restart: always
+    command: "celery -A archives.tasks flower --port=5000"
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    env_file: .env
