@@ -7,3 +7,4 @@ packed.*
 build/
 dist/
 .env
+.ftpconfig
