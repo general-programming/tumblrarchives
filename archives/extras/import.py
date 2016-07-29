@@ -28,10 +28,10 @@ class Blog(object):
 
         try:
             sql.add(post)
-            sql.commit()
             self.ids.add(data['id'])
-        except IntegrityError:
-            print "sqlalchemy.exc.IntegrityError"
+        except IntegrityError as e:
+            print("IntegrityError")
+            print(str(e))
             sql.rollback()
 
 blog = Blog(sys.argv[1])
@@ -58,6 +58,7 @@ for offset in xrange(0, info['blog']['posts'] + 20, 20):
         if status == "indb":
             bad += 1
             continue
+    sql.commit()
     print "%s/%s" % (offset, info['blog']['posts'])
     time.sleep(0.25)
 
