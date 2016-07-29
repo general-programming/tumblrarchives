@@ -4,9 +4,8 @@ import uuid
 
 from flask import g, request, current_app, abort
 from redis import StrictRedis, ConnectionPool
-from sqlalchemy import func
 
-from archives.lib.model import sm, Post
+from archives.lib.model import sm
 
 redis_pool = ConnectionPool(
     host=os.environ.get('REDIS_PORT_6379_TCP_ADDR', os.environ.get('REDIS_HOST', '127.0.0.1')),
@@ -73,8 +72,6 @@ def connect_redis():
 def before_request():
     if request.endpoint == "static":
         return
-
-    g.rowcount = g.sql.query(func.count(Post.id)).scalar()
 
 def disconnect_sql(result=None):
     if hasattr(g, "sql"):
