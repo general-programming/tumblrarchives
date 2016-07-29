@@ -10,3 +10,4 @@ flower
 celery
 SQLAlchemy
 gunicorn
+classtools
