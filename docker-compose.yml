@@ -1,0 +1,13 @@
+version: '2'
+services:
+  redis:
+    image: redis:3.2.1-alpine
+    restart: always
+
+  web:
+    build: .
+    restart: always
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    env_file: .env
