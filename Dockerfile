@@ -2,7 +2,7 @@ FROM gliderlabs/alpine:edge
 
 # Update packages and install setup requirements.
 RUN apk --no-cache upgrade && \
-	apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing python python-dev py-pip py-flask py-gevent py-gunicorn py-httplib2 py-sqlalchemy py-psycopg2 py-oauth2 py-mako gcc musl-dev postgresql-dev ca-certificates && \
+	apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing python python-dev py-pip gcc musl-dev postgresql-dev ca-certificates && \
 	update-ca-certificates && \
 	rm -rf /var/cache/apk/*
 
