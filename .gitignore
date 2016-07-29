@@ -6,3 +6,4 @@ packed.*
 *.egg-info
 build/
 dist/
+.env
