@@ -11,3 +11,5 @@ celery
 SQLAlchemy
 gunicorn
 classtools
+beautifulsoup4
+html5lib

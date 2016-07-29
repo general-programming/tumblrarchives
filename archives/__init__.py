@@ -7,7 +7,7 @@ from archives.lib.requests import (before_request, cache_breaker,
                                    check_csrf_token, connect_redis,
                                    connect_sql, disconnect_redis,
                                    disconnect_sql, set_cookie)
-from archives.views import main
+from archives.views import main, graph
 from flask import Flask, render_template, request
 
 app = Flask(__name__)
@@ -35,6 +35,7 @@ app.teardown_request(disconnect_redis)
 
 # Blueprints
 app.register_blueprint(main.blueprint)
+app.register_blueprint(graph.blueprint, url_prefix="/graph")
 
 # Error handlers
 @app.errorhandler(404)

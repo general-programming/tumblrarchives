@@ -1,6 +1,7 @@
 # This Python file uses the following encoding: utf-8
 import os
 import uuid
+import pytumblr
 
 from archives.lib.model import sm
 from flask import abort, current_app, g, request
@@ -14,7 +15,7 @@ redis_pool = ConnectionPool(
 )
 
 def set_cookie(response):
-    if "archives" not in request.cookies:
+    if "archives" not in request.cookies and hasattr(g, "session_id"):
         response.set_cookie(
             "archives",
             g.session_id,
@@ -71,6 +72,11 @@ def connect_redis():
 def before_request():
     if request.endpoint == "static":
         return
+
+    g.tumblr = pytumblr.TumblrRestClient(
+        os.environ.get("TUMBLR_CONSUMER_KEY"),
+        os.environ.get("TUMBLR_CONSUMER_SECRET")
+    )
 
 def disconnect_sql(result=None):
     if hasattr(g, "sql"):

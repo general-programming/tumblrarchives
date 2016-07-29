@@ -62,9 +62,9 @@
 
 	<div class="bottom">
 		<a href="{{url_for("main.post", postid=post.data['id'])}}"><b title="{{post.data['date']}}">{{post.data['timestamp']|prettydate}}</b></a>
-		<a style="float: right" class="btn-floating btn-large waves-effect waves-light green" target="_blank" href="http://tumblr.com/reblog/{{post.data['id']}}/{{post.data['reblog_key']}}"> <i class="mdi-av-repeat"></i></a>
+		<a style="float: right" class="btn waves-effect waves-light green" target="_blank" href="http://tumblr.com/reblog/{{post.data['id']}}/{{post.data['reblog_key']}}"> <i class="material-icons">repeat</i></a>
 		{% if post.data['tags'] %}
-		<p> {% for tag in post.data['tags'] %} <a href="{{url_for("main.archive", url=url, tag=tag, page=1)}}">#{{tag}}</a> {% endfor %}</p>
+		<span class="tags"> - {% for tag in post.data['tags'] %} <a href="{{url_for("main.archive", url=url, tag=tag, page=1)}}">#{{tag}}</a> {% endfor %}</span>
 		{% endif %}
 	</div>
 </div>
@@ -80,9 +80,10 @@
 	<title>Archive</title>
 
 	<!-- Stylesheets -->
-	<link rel="stylesheet" href="{{url_for("static", filename="css/highlight/github.css")}}">
-	<link rel="stylesheet" href="{{url_for("static", filename="css/materialize.min.css")}}">
+	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.5.0/styles/github.min.css">
+	 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css">
 	<link href="//fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.min.css">
 	<link rel="stylesheet" href="{{url_for("static", filename="css/main.css")}}" type="text/css">
 	{% block styles %}{% endblock %}
 </head>
@@ -93,7 +94,7 @@
 	<nav class="top-nav green">
 		<ul class="left">
 			<a href="#" data-activates="nav-mobile" class="button-collapse full">
-				<i class="mdi-navigation-menu"></i>
+				<i class="material-icons">menu</i>
 			</a>
 		</ul>
 		<div class="nav-wrapper center">
@@ -107,7 +108,7 @@
 	<!-- Collect the nav links, forms, and other content for toggling -->
 	<ul id="nav-mobile" class="side-nav fixed">
 		<li class="logo">
-			<i class="mdi-content-archive large green-text"></i>
+			<i class="material-icons large green-text">archive</i>
 		</li>
 		<li class="bold{% if active_page == "home" %} active{% endif %}"><a href="/">Home</a></li>
 		<li class="bold{% if active_page == "submit" %} active{% endif %}"><a href="/submit">Submit</a></li>
@@ -150,14 +151,15 @@
 
 	<!-- Scripts -->
 	<script src="{{url_for("static", filename="js/jquery.min.js")}}"></script>
-	<script src="{{url_for("static", filename="js/materialize.min.js")}}"></script>
-	<script src="{{url_for("static", filename="js/highlight.pack.js")}}"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.5.0/highlight.min.js"></script>
 	<script src="{{url_for("static", filename="js/main.js")}}"></script>
 	{% if toast %}
 	<script>
 	Materialize.toast('<span>{{toast|safe}}</span>', 30000)
 	</script>
 	{% endif %}
-
+	{% block scripts %}{% endblock %}
 </body>
 </html>
