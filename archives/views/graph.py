@@ -16,7 +16,11 @@ def get_links(url):
     # Find links
     for post in g.sql.query(Post).filter(Post.url == url):
         for key in TEXT_KEYS:
-            soup = BeautifulSoup(post.data.get(key, ""), "html5lib")
+            content = post.data.get(key, "").strip()
+            if not content:
+                continue
+
+            soup = BeautifulSoup(content, "html5lib")
             for link in soup.find_all("a"):
                 try:
                     links.add(link["href"])
@@ -73,12 +77,15 @@ def generate_post_graph(url):
 
     return vis
 
-@blueprint.route("/<url>")
+@blueprint.route("/<url>/users")
 def graph(url=None):
     try:
         g.sql.query(Post).filter(Post.url == url).limit(1).one()
     except NoResultFound:
         return abort(404)
+
+    if "json" in request.args:
+        return jsonify(get_links())
 
     data = generate_post_graph(url)
 
