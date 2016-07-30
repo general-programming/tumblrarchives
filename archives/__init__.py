@@ -7,7 +7,7 @@ from archives.lib.requests import (before_request, cache_breaker,
                                    check_csrf_token, connect_redis,
                                    connect_sql, disconnect_redis,
                                    disconnect_sql, set_cookie)
-from archives.views import main, graph
+from archives.views import graph, main
 from flask import Flask, render_template, request
 
 app = Flask(__name__)

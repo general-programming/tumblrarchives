@@ -1,9 +1,9 @@
 import sys
 import time
 
+from archives.lib.connections import create_tumblr
 from archives.lib.model import Post, sm
 from sqlalchemy.exc import IntegrityError
-from archives.lib.connections import create_tumblr
 
 sql = sm()
 

@@ -1,8 +1,8 @@
 # This Python file uses the following encoding: utf-8
 import os
 import uuid
-import pytumblr
 
+from archives.lib.connections import create_tumblr
 from archives.lib.model import sm
 from flask import abort, current_app, g, request
 from redis import ConnectionPool, StrictRedis
@@ -73,10 +73,7 @@ def before_request():
     if request.endpoint == "static":
         return
 
-    g.tumblr = pytumblr.TumblrRestClient(
-        os.environ.get("TUMBLR_CONSUMER_KEY"),
-        os.environ.get("TUMBLR_CONSUMER_SECRET")
-    )
+    g.tumblr = create_tumblr()
 
 def disconnect_sql(result=None):
     if hasattr(g, "sql"):

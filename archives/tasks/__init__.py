@@ -1,6 +1,4 @@
-import os
-
-import pytumblr
+from archives.lib.connections import create_tumblr
 from archives.lib.model import sm
 from archives.lib.requests import redis_pool
 from celery import Celery, Task
@@ -26,10 +24,7 @@ class WorkerTask(Task):
 
     @reify
     def tumblr_client(self):
-        return pytumblr.TumblrRestClient(
-            os.environ.get("TUMBLR_CONSUMER_KEY"),
-            os.environ.get("TUMBLR_CONSUMER_SECRET")
-        )
+        return create_tumblr()
 
     def after_return(self, *args, **kwargs):
         if hasattr(self, "db"):
