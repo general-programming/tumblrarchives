@@ -2,7 +2,7 @@ from archives.lib import Page
 from archives.lib.helpers import parse_tumblr_url
 from archives.lib.model import Post
 from archives.tasks.tumblr import archive_post
-from flask import (Blueprint, g, jsonify, redirect, render_template, request,
+from flask import (abort, Blueprint, g, jsonify, redirect, render_template, request,
                    url_for)
 from sqlalchemy import func
 from sqlalchemy.dialects.postgresql import TEXT
@@ -10,7 +10,7 @@ from sqlalchemy.exc import DataError
 from sqlalchemy.orm.exc import NoResultFound
 from webhelpers.paginate import PageURL
 
-blueprint = Blueprint('main', __name__)
+blueprint = Blueprint('archive', __name__)
 
 POST_TYPES = ['text', 'quote', 'link', 'answer', 'video', 'audio', 'photo', 'chat']
 
@@ -36,7 +36,7 @@ def post(postid=None):
     try:
         post = g.sql.query(Post).filter(Post.data['id'] == postid).one()
     except (NoResultFound, DataError):
-        return redirect(url_for('main.front'))
+        abort(404)
 
     if 'json' in request.args:
         return jsonify(post.data)
@@ -46,7 +46,7 @@ def post(postid=None):
 @blueprint.route("/archive/<url>")
 def archive(url=None, page=1):
     if not url or not g.sql.query(Post).filter(Post.url == url).limit(1).count():
-        return redirect(url_for('main.front'))
+        abort(404)
 
     page = request.args.get('page', None)
     tag = request.args.get('tag', None)
