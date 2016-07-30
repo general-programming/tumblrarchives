@@ -1,9 +1,10 @@
-from archives.lib.model import Post
-from flask import Blueprint, g, jsonify, redirect, render_template, request, abort
-from sqlalchemy.orm.exc import NoResultFound
-from bs4 import BeautifulSoup
 import json
 
+from archives.lib.model import Post
+from bs4 import BeautifulSoup
+from flask import (Blueprint, abort, g, jsonify, redirect, render_template,
+                   request)
+from sqlalchemy.orm.exc import NoResultFound
 
 blueprint = Blueprint('graph', __name__)
 
@@ -85,7 +86,7 @@ def graph(url=None):
         return abort(404)
 
     if "json" in request.args:
-        return jsonify(get_links())
+        return jsonify(list(get_links(url)))
 
     data = generate_post_graph(url)
 
