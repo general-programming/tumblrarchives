@@ -2,17 +2,11 @@
 import os
 import uuid
 
-from archives.lib.connections import create_tumblr
+from archives.lib.connections import create_tumblr, redis_pool
 from archives.lib.model import sm
 from flask import abort, current_app, g, request
-from redis import ConnectionPool, StrictRedis
+from redis import StrictRedis
 
-redis_pool = ConnectionPool(
-    host=os.environ.get('REDIS_PORT_6379_TCP_ADDR', os.environ.get('REDIS_HOST', '127.0.0.1')),
-    port=int(os.environ.get('REDIS_PORT_6379_TCP_PORT', os.environ.get('REDIS_PORT', 6379))),
-    db=int(os.environ.get('REDIS_DB', 0)),
-    decode_responses=True
-)
 
 def set_cookie(response):
     if "archives" not in request.cookies and hasattr(g, "session_id"):

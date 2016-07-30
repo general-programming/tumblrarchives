@@ -1,6 +1,6 @@
 import os
 
-from archives.lib.requests import redis_pool
+from archives.lib.connections import redis_pool
 
 # Debug
 if 'DEBUG' in os.environ:

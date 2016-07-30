@@ -1,6 +1,5 @@
-from archives.lib.connections import create_tumblr
+from archives.lib.connections import create_tumblr, redis_pool
 from archives.lib.model import sm
-from archives.lib.requests import redis_pool
 from celery import Celery, Task
 from classtools import reify
 from redis import StrictRedis
