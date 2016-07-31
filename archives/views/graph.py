@@ -25,7 +25,7 @@ def generate_post_graph(post):
             "id": current_id,
             "label": blog,
             "shape": "circularImage",
-            "image": get_profile(post.url, g.redis, g.tumblr)
+            "image": get_profile(blog, g.redis, g.tumblr)
         })
         edges.append({
             "from": top_id,
