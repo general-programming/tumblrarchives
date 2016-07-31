@@ -56,7 +56,7 @@ function init_graph(data) {
 	var network = new vis.Network(container, parsed, options);
 
 	network.on("doubleClick", function (params) {
-	  var node = nodes.get(params["nodes"][0]);
+	  var node = parsed.nodes.get(params["nodes"][0]);
 	  var url = node.label;
 	  window.open("http://" + url + ".tumblr.com");
 	});
