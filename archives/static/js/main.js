@@ -13,7 +13,7 @@ $(document).ready(function() {
 	$(".button-collapse").sideNav({'edge': 'left'});
 
 	if (haslocalStorage) {
-		if (localStorage.getItem("debug") === "on") {
+		if (localStorage.getItem("debug") !== null) {
 			$(".debugbutton").show();
 			$(".debug").show();
 		}
