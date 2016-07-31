@@ -61,10 +61,10 @@
 	{% endif %}
 
 	<div class="bottom">
-		<a href="{{url_for("main.post", postid=post.data['id'])}}"><b title="{{post.data['date']}}">{{post.data['timestamp']|prettydate}}</b></a>
+		<a href="{{url_for("archive.post", postid=post.data['id'])}}"><b title="{{post.data['date']}}">{{post.data['timestamp']|prettydate}}</b></a>
 		<a style="float: right" class="btn waves-effect waves-light green" target="_blank" href="http://tumblr.com/reblog/{{post.data['id']}}/{{post.data['reblog_key']}}"> <i class="material-icons">repeat</i></a>
 		{% if post.data['tags'] %}
-		<span class="tags"> - {% for tag in post.data['tags'] %} <a href="{{url_for("main.archive", url=url, tag=tag, page=1)}}">#{{tag}}</a> {% endfor %}</span>
+		<span class="tags"> - {% for tag in post.data['tags'] %} <a href="{{url_for("archive.archive", url=url, tag=tag, page=1)}}">#{{tag}}</a> {% endfor %}</span>
 		{% endif %}
 	</div>
 </div>
@@ -118,9 +118,9 @@
 				<a class="collapsible-header">{{url}}</a>
 				<div class="collapsible-body">
 					<ul>
-						<li {% if posttype == 'all' %}class="active"{% endif %}><a href="{{url_for("main.archive", url=url, page=request.args.page)}}">All</a></li>
+						<li {% if posttype == 'all' %}class="active"{% endif %}><a href="{{url_for("archive.archive", url=url, page=request.args.page)}}">All</a></li>
 						{% for typ in POST_TYPES %}
-						<li {% if posttype == typ %}class="active"{% endif %}><a href="{{url_for("main.archive", url=url, page=request.args.page, type=typ)}}">{{typ|capitalize}}</a></li>
+						<li {% if posttype == typ %}class="active"{% endif %}><a href="{{url_for("archive.archive", url=url, page=request.args.page, type=typ)}}">{{typ|capitalize}}</a></li>
 						{% endfor %}
 					</ul>
 				</div>
@@ -128,8 +128,8 @@
 		</ul>
 		{% endif %}
 		{% if post %}
-		<li class="bold"><a href="{{url_for("main.archive", url=post.url, page=1)}}">{{post.url}}</a></li>
-		<li class="bold active"><a href="{{url_for("main.post", postid=post.data['id'])}}">#{{post.data['id']}}</a></li>
+		<li class="bold"><a href="{{url_for("archive.archive", url=post.url, page=1)}}">{{post.url}}</a></li>
+		<li class="bold active"><a href="{{url_for("archive.post", postid=post.data['id'])}}">#{{post.data['id']}}</a></li>
 		{% endif %}
 	</ul>
 </header>

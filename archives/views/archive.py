@@ -25,7 +25,7 @@ def submit():
 
     if parsed:
         archive_post.delay(parsed["url"], parsed["post_id"])
-        toast = 'Your post has been archived <a href="%s"> here</a>.' % (url_for("main.post", postid=parsed["post_id"]))
+        toast = 'Your post has been archived <a href="%s"> here</a>.' % (url_for("archive.post", postid=parsed["post_id"]))
     elif "url" in request.form:
         toast = "The URL you entered is invalid. <br> An example of a valid URL is demo.tumblr.com/post/236"
 
@@ -53,9 +53,9 @@ def archive(url=None, page=1):
     posttype = request.args.get('type', 'all')
 
     if page < 1 or not page:
-        return redirect(url_for('main.archive', url=url, page=1))
+        return redirect(url_for('archive.archive', url=url, page=1))
 
-    url_for_page = PageURL(url_for("main.archive", url=url), {"page": page})
+    url_for_page = PageURL(url_for("archive.archive", url=url), {"page": page})
 
     sql = g.sql.query(Post).filter(Post.url == url)
 
