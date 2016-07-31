@@ -15,10 +15,9 @@
 	<div style="display: none" class="row debug">
 		<!-- JSON post -->
 		<div class="col s12">
-			<pre class="hljs code"> 
-				<span class="codeinfo">JSON <a href="{{url_for("archive.post", postid=post.data['id'], json=1)}}"> raw </a></span>
-				<code>{{post.data|prettyjson}}</code>
-			</pre>
+			<!-- Ugly HTML because the newlines render in the pre text. -->
+			<pre class="hljs code"><span class="codeinfo">JSON <a href="{{url_for("archive.post", postid=post.data['id'], json=1)}}"> raw </a></span>
+<code>{{post.data|prettyjson}}</code></pre>
 		</div>
 
 		<!-- Table card -->
