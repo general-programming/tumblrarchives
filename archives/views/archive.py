@@ -2,8 +2,8 @@ from archives.lib import Page
 from archives.lib.helpers import parse_tumblr_url
 from archives.lib.model import Post
 from archives.tasks.tumblr import archive_post
-from flask import (abort, Blueprint, g, jsonify, redirect, render_template, request,
-                   url_for)
+from flask import (Blueprint, abort, g, jsonify, redirect, render_template,
+                   request, url_for)
 from sqlalchemy import func
 from sqlalchemy.dialects.postgresql import TEXT
 from sqlalchemy.exc import DataError
