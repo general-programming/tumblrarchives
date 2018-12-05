@@ -14,9 +14,9 @@ class Blog(object):
 
     def add(self, data):
         if data['id'] in self.ids:
-            print "ID {id} in database.".format(
+            print("ID {id} in database.".format(
                 id=data['id']
-            )
+            ))
 
             return "indb"
 
@@ -30,7 +30,7 @@ class Blog(object):
             self.ids.add(data['id'])
         except IntegrityError as e:
             print("IntegrityError")
-            print(str(e))
+            print((str(e)))
             sql.rollback()
 
 blog = Blog(sys.argv[1])
@@ -43,9 +43,9 @@ info = client.blog_info(blog.url)
 
 bad = 0
 
-for offset in xrange(0, info['blog']['posts'] + 20, 20):
+for offset in range(0, info['blog']['posts'] + 20, 20):
     if bad >= 5:
-        print "All posts crawled. (Probarly)"
+        print("All posts crawled. (Probarly)")
         break
 
     posts = client.posts(blog.url + ".tumblr.com", offset=offset)['posts']
@@ -55,7 +55,7 @@ for offset in xrange(0, info['blog']['posts'] + 20, 20):
             bad += 1
             continue
     sql.commit()
-    print "%s/%s" % (offset, info['blog']['posts'])
+    print("%s/%s" % (offset, info['blog']['posts']))
     time.sleep(0.25)
 
 sql.close()

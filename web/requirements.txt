@@ -5,7 +5,7 @@ hiredis
 redis==2.10.6  # https://github.com/celery/celery/issues/5175
 PyTumblr
 psycopg2
-WebHelpers
+paginate_sqlalchemy
 flower
 celery
 SQLAlchemy
@@ -13,3 +13,4 @@ gunicorn
 classtools
 beautifulsoup4
 html5lib
+furl

@@ -1,21 +1,20 @@
 # This Python file uses the following encoding: utf-8
 import re
-
-from webhelpers import paginate
-from webhelpers.html import HTML
+from paginate import make_html_tag
+from paginate_sqlalchemy import SqlalchemyOrmPage
 
 
 # Pagination class credit https://github.com/ckan/ckan/blob/fd4d60c64a28801ed1dea76f353f8f6ee9f74d45/ckan/lib/helpers.py#L890-L925
 
-class Page(paginate.Page):
+class Page(SqlalchemyOrmPage):
     # Curry the pager method of the webhelpers.paginate.Page class, so we have
     # our custom layout set as default.
 
     def pager(self, *args, **kwargs):
         kwargs.update(
-            format=u'<ul class="pagination">$link_previous ~2~ $link_next</ul></nav>',
-            symbol_previous=u'«',
-            symbol_next=u'»',
+            format='<ul class="pagination">$link_previous ~2~ $link_next</ul></nav>',
+            symbol_previous='«',
+            symbol_next='»',
             curpage_attr={'class': 'active waves-effect'},
             link_attr={'class': 'waves-effect'}
         )
@@ -26,7 +25,7 @@ class Page(paginate.Page):
     def _pagerlink(self, page, text, extra_attributes=None):
         anchor = super(Page, self)._pagerlink(page, text)
         extra_attributes = extra_attributes or {}
-        return HTML.li(anchor, **extra_attributes)
+        return make_html_tag("li", anchor, **extra_attributes)
 
     # Change 'current page' link from <span> to <li><a>
     # and '..' into '<li><a>..'
@@ -40,7 +39,7 @@ class Page(paginate.Page):
 
         # Convert current page
         text = '%s' % self.page
-        current_page_span = str(HTML.span(c=text, **self.curpage_attr))
+        current_page_span = str(make_html_tag("span", text, **self.curpage_attr))
         current_page_link = self._pagerlink(self.page, text,
                                             extra_attributes=self.curpage_attr)
         return re.sub(current_page_span, current_page_link, html)

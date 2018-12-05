@@ -8,7 +8,7 @@ from sqlalchemy import func
 from sqlalchemy.dialects.postgresql import TEXT
 from sqlalchemy.exc import DataError
 from sqlalchemy.orm.exc import NoResultFound
-from webhelpers.paginate import PageURL
+from furl import furl
 
 blueprint = Blueprint('archive', __name__)
 
@@ -48,23 +48,26 @@ def archive(url=None, page=1):
     if not url or not g.sql.query(Post).filter(Post.url == url).limit(1).count():
         abort(404)
 
-    page = request.args.get('page', None)
+    try:
+        page = int(request.args.get('page', 1))
+    except ValueError:
+        page = 1
     tag = request.args.get('tag', None)
     posttype = request.args.get('type', 'all')
 
-    if page < 1 or not page:
+    if not page or page < 1:
         return redirect(url_for('archive.archive', url=url, page=1))
 
-    url_for_page = PageURL(url_for("archive.archive", url=url), {"page": page})
+    url_for_page = furl(url_for("archive.archive", url=url), {"page": page})
 
     sql = g.sql.query(Post).filter(Post.url == url)
 
     if tag:
-        url_for_page.params.update({"tag": tag})
+        url_for_page.set({"tag": tag})
         # complete tag hack because i have no idea how to filter json arrays with jsonb (lol)
         sql = sql.filter(func.lower(Post.data['tags'].cast(TEXT)).contains('"' + tag + '"'))
     elif posttype in POST_TYPES:
-        url_for_page.params.update({"type": posttype})
+        url_for_page.set({"type": posttype})
         sql = sql.filter(Post.data['type'].astext == posttype)
 
     posts = Page(sql.order_by(Post.data['timestamp'].desc()), items_per_page=15, page=page, url=url_for_page)
