@@ -2,7 +2,7 @@ alembic
 Flask
 gevent
 hiredis
-redis
+redis==2.10.6  # https://github.com/celery/celery/issues/5175
 PyTumblr
 psycopg2
 WebHelpers

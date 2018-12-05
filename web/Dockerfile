@@ -1,4 +1,4 @@
-FROM gliderlabs/alpine:edge
+FROM alpine:edge
 
 # Update packages and install setup requirements.
 RUN apk --no-cache upgrade && \
