@@ -62,5 +62,14 @@ class Post(Base):
 
         return blogs
 
+class Blog(Base):
+    __tablename__ = "blogs"
+    id = Column(Integer, primary_key=True)
+    tumblr_uid = Column(String, nullable=False)
+    url = Column(String(200))
+
+    data = Column(JSONB, nullable=False)
+    extra_meta = Column(JSONB)
+
 # Index for querying by url.
 Index("index_post_url", Post.url)
