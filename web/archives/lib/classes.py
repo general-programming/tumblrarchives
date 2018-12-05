@@ -7,6 +7,21 @@ from paginate_sqlalchemy import SqlalchemyOrmPage
 # Pagination class credit https://github.com/ckan/ckan/blob/fd4d60c64a28801ed1dea76f353f8f6ee9f74d45/ckan/lib/helpers.py#L890-L925
 
 class Page(SqlalchemyOrmPage):
+    # Put each page link into a <li> (for Bootstrap to style it)
+
+    @staticmethod
+    def default_link_tag(item, extra_attributes=None):
+        """
+        Create an A-HREF tag that points to another page.
+        """
+        extra_attributes = extra_attributes or {}
+
+        text = item["value"]
+        target_url = item["href"]
+
+        a_html = make_html_tag("a", text=text, href=target_url, **item["attrs"])
+        return make_html_tag("li", a_html, **extra_attributes)
+
     # Curry the pager method of the webhelpers.paginate.Page class, so we have
     # our custom layout set as default.
 
@@ -15,31 +30,20 @@ class Page(SqlalchemyOrmPage):
             format='<ul class="pagination">$link_previous ~2~ $link_next</ul></nav>',
             symbol_previous='«',
             symbol_next='»',
+            dotdot_attr={'class': 'pager_dotdot'},
             curpage_attr={'class': 'active waves-effect'},
             link_attr={'class': 'waves-effect'}
         )
         return super(Page, self).pager(*args, **kwargs)
 
-    # Put each page link into a <li> (for Bootstrap to style it)
-
-    def _pagerlink(self, page, text, extra_attributes=None):
-        anchor = super(Page, self)._pagerlink(page, text)
-        extra_attributes = extra_attributes or {}
-        return make_html_tag("li", anchor, **extra_attributes)
-
     # Change 'current page' link from <span> to <li><a>
     # and '..' into '<li><a>..'
     # (for Bootstrap to style them properly)
 
-    def _range(self, regexp_match):
-        html = super(Page, self)._range(regexp_match)
+    def _range(self, link_map, radius):
+        html = super(Page, self)._range(link_map, radius)
         # Convert ..
         dotdot = '<span class="pager_dotdot">..</span>'
         html = re.sub(dotdot, "", html)
 
-        # Convert current page
-        text = '%s' % self.page
-        current_page_span = str(make_html_tag("span", text, **self.curpage_attr))
-        current_page_link = self._pagerlink(self.page, text,
-                                            extra_attributes=self.curpage_attr)
-        return re.sub(current_page_span, current_page_link, html)
+        return html

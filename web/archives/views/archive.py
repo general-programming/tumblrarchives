@@ -9,6 +9,7 @@ from sqlalchemy.dialects.postgresql import TEXT
 from sqlalchemy.exc import DataError
 from sqlalchemy.orm.exc import NoResultFound
 from furl import furl
+from urllib.parse import unquote
 
 blueprint = Blueprint('archive', __name__)
 
@@ -60,7 +61,7 @@ def archive(url=None, page=1):
     if not page or page < 1:
         return redirect(url_for('archive.archive', url=url, page=1))
 
-    url_for_page = furl(url_for("archive.archive", url=url), {"page": page})
+    url_for_page = furl(url_for("archive.archive", url=url), {"page": "$page"})
 
     sql = g.sql.query(Post).filter(Post.url == url)
 
@@ -72,11 +73,12 @@ def archive(url=None, page=1):
         url_for_page.set({"type": posttype})
         sql = sql.filter(Post.data['type'].astext == posttype)
 
-    posts = Page(sql.order_by(Post.data['timestamp'].desc()), items_per_page=15, page=page, url=url_for_page)
+    posts = Page(sql.order_by(Post.data['timestamp'].desc()), items_per_page=15, page=page)
 
     return render_template(
         "archive.html",
         url=url,
+        paginate_url=unquote(url_for_page.url),
         posts=posts,
         tag=tag,
         posttype=posttype,

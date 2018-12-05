@@ -10,7 +10,7 @@
 {% for post in posts %}
 	{{renderpost(post)}}
 {% endfor %}
-	{{posts.pager()}}
+	{{posts.pager(url=paginate_url) | safe}}
 	</div>
 </div>
 {% endblock %}
