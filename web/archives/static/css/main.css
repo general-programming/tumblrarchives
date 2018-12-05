@@ -181,9 +181,3 @@ ul.side-nav.fixed li a {
 footer.page-footer {
 	padding-top: 0;
 }
-
-.tags {
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-}

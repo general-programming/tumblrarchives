@@ -74,3 +74,4 @@ class Blog(Base):
 
 # Index for querying by url.
 Index("index_post_url", Post.url)
+Index("blog_uid_unique", Blog.tumblr_uid, unique=True)
