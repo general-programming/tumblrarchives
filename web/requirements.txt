@@ -14,3 +14,4 @@ classtools
 beautifulsoup4
 html5lib
 furl
+sentry-sdk[flask]
