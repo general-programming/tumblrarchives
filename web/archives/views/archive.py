@@ -51,10 +51,12 @@ def archive(url=None, page=1):
     try:
         page = int(request.args.get('page', 1))
     except ValueError:
-        page = 1
+        page = None
+
     tag = request.args.get('tag', None)
     posttype = request.args.get('type', 'all')
 
+    # Redirect to the page parameter if it is not given.
     if not page or page < 1:
         return redirect(url_for('archive.archive', url=url, page=1))
 

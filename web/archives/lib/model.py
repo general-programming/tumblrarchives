@@ -2,7 +2,7 @@
 import os
 
 from bs4 import BeautifulSoup
-from sqlalchemy import Column, Integer, String, create_engine, inspect
+from sqlalchemy import Column, Integer, String, ForeignKey, create_engine, inspect
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -27,6 +27,7 @@ Base.query = base_session.query_property()
 class Post(Base):
     __tablename__ = 'posts'
     id = Column(Integer, primary_key=True)
+    author = Column(ForeignKey("blogs.id"))
     url = Column(String(200))
     data = Column(JSONB, nullable=False)
 
