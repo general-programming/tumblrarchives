@@ -1,31 +1,59 @@
-version: '2'
+version: '3.6'
 services:
   redis:
-    image: redis:3.2.1-alpine
+    image: redis:alpine
     restart: always
+    networks:
+      - tumblrarchives
 
   web:
-    build: .
+    image: registry.nepeat.com/tumblrarchives
+    build: web
     restart: always
     environment:
       REDIS_HOST: redis
       REDIS_PORT: 6379
     env_file: .env
+    networks:
+      - tumblrarchives
+      - publicweb
+    deploy:
+      labels:
+        - traefik.enable=true
+        - traefik.port=5000
+        - traefik.docker.network=publicweb
+        # Routes
+        - traefik.frontend.rule=Host:tumblrarchives.nepeat.com
+      restart_policy:
+        condition: any
 
   celery:
-    build: .
+    image: registry.nepeat.com/tumblrarchives
+    build: web
     restart: always
     command: "celery -A archives.tasks worker -P gevent --autoscale=4,1"
     environment:
       REDIS_HOST: redis
       REDIS_PORT: 6379
+    networks:
+      - tumblrarchives
     env_file: .env
     
   flower:
-    build: .
+    image: registry.nepeat.com/tumblrarchives
+    build: web
     restart: always
     command: "celery -A archives.tasks flower --port=5000"
     environment:
       REDIS_HOST: redis
       REDIS_PORT: 6379
+    networks:
+      - tumblrarchives
     env_file: .env
+
+networks:
+  tumblrarchives:
+    driver: overlay
+  publicweb:
+    driver: overlay
+    external: true

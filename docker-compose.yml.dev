@@ -1,0 +1,42 @@
+version: '2'
+services:
+  redis:
+    image: redis:alpine
+    restart: always
+
+  postgres:
+    image: postgres:9.6
+    restart: always
+    environment:
+      POSTGRES_USER: archives
+      POSTGRES_PASSWORD: development
+      POSTGRES_DB: archives
+
+  web:
+    build: web
+    restart: always
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      POSTGRES_URL: postgresql://archives:development@postgres/archives
+    env_file: .env
+
+  celery:
+    build: web
+    restart: always
+    command: "celery -A archives.tasks worker -P gevent --autoscale=4,1"
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      POSTGRES_URL: postgresql://archives:development@postgres/archives
+    env_file: .env
+    
+  flower:
+    build: web
+    restart: always
+    command: "celery -A archives.tasks flower --port=5000"
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      POSTGRES_URL: postgresql://archives:development@postgres/archives
+    env_file: .env
