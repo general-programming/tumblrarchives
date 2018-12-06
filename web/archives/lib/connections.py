@@ -11,7 +11,15 @@ redis_pool = ConnectionPool(
 )
 
 def create_tumblr():
-    return pytumblr.TumblrRestClient(
-        os.environ.get("TUMBLR_CONSUMER_KEY"),
-        os.environ.get("TUMBLR_CONSUMER_SECRET")
-    )
+    if not "TUMBLR_TOKEN_SECRET":
+        return pytumblr.TumblrRestClient(
+            os.environ.get("TUMBLR_CONSUMER_KEY"),
+            os.environ.get("TUMBLR_CONSUMER_SECRET")
+        )
+    else:
+        return pytumblr.TumblrRestClient(
+            os.environ.get("TUMBLR_CONSUMER_KEY"),
+            os.environ.get("TUMBLR_CONSUMER_SECRET"),
+            os.environ.get("TUMBLR_TOKEN"),
+            os.environ.get("TUMBLR_TOKEN_SECRET")
+        )

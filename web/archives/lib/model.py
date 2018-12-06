@@ -1,9 +1,13 @@
 # This Python file uses the following encoding: utf-8
 import os
 
+from urllib.parse import urlparse
+from contextlib import contextmanager
+
 from bs4 import BeautifulSoup
-from sqlalchemy import Column, Integer, String, ForeignKey, create_engine, inspect
-from sqlalchemy.dialects.postgresql import JSONB
+
+from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, create_engine, inspect
+from sqlalchemy.dialects.postgresql import JSONB, insert
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.schema import Index
@@ -23,6 +27,20 @@ base_session = scoped_session(sm)
 
 Base = declarative_base()
 Base.query = base_session.query_property()
+
+@contextmanager
+def session_scope():
+    """Provide a transactional scope around a series of operations."""
+    session = sm()
+    try:
+        yield session
+        session.commit()
+    except:
+        session.rollback()
+        raise
+    finally:
+        session.close()
+
 
 class Post(Base):
     __tablename__ = 'posts'
@@ -68,9 +86,30 @@ class Blog(Base):
     id = Column(Integer, primary_key=True)
     tumblr_uid = Column(String, nullable=False)
     url = Column(String(200))
+    name = Column(String(200))
+    nsfw = Column(Boolean, server_default='f')
 
     data = Column(JSONB, nullable=False)
     extra_meta = Column(JSONB)
+
+    @classmethod
+    def create_from_metadata(cls, db, info):
+        blog_data = dict(
+            url=urlparse(info["blog"].pop("url")).netloc,
+            name=info["blog"].pop("name"),
+            tumblr_uid=info["blog"].pop("uuid"),
+            nsfw=info["blog"].pop("is_nsfw", False),
+            extra_meta=info.get("meta", {})
+        )
+        blog_data["data"] = info["blog"]
+    
+        db.execute(insert(Blog).values(
+            **blog_data
+        ).on_conflict_do_update(index_elements=["tumblr_uid"], set_=blog_data))
+
+        return db.query(Blog).filter(
+            Blog.tumblr_uid == blog_data["tumblr_uid"]
+        ).scalar()
 
 # Index for querying by url.
 Index("index_post_url", Post.url)
