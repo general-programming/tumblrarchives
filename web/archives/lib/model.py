@@ -9,7 +9,7 @@ from bs4 import BeautifulSoup
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, create_engine, inspect
 from sqlalchemy.dialects.postgresql import JSONB, insert
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import scoped_session, sessionmaker
+from sqlalchemy.orm import scoped_session, sessionmaker, relationship
 from sqlalchemy.schema import Index
 
 from archives.lib.utils import clean_data
@@ -47,7 +47,9 @@ def session_scope():
 class Post(Base):
     __tablename__ = 'posts'
     id = Column(Integer, primary_key=True)
-    author = Column(ForeignKey("blogs.id"))
+    author_id = Column(ForeignKey("blogs.id"))
+    author = relationship("Blog")
+
     url = Column(String(200))
     data = Column(JSONB, nullable=False)
 
@@ -59,7 +61,7 @@ class Post(Base):
         blogs = set()
 
         # Find links
-        for post in sql.query(Post).filter(Post.url == self.url):
+        for post in sql.query(Post).filter(Post.author_id == self.author_id):
             content = ""
 
             for key in TEXT_KEYS:
@@ -141,5 +143,5 @@ class Blog(Base):
         return blog_object
 
 # Index for querying by url.
-Index("index_post_url", Post.url)
+Index("index_blog_name", Blog.name)
 Index("blog_uid_unique", Blog.tumblr_uid, unique=True)
