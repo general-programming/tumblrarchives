@@ -1,12 +1,13 @@
 from archives.lib import Page
 from archives.lib.helpers import parse_tumblr_url
-from archives.lib.model import Post
+from archives.lib.model import Post, Blog
 from archives.tasks.tumblr import archive_post
 from flask import (Blueprint, abort, g, jsonify, redirect, render_template,
                    request, url_for)
 from sqlalchemy import func
 from sqlalchemy.dialects.postgresql import TEXT
 from sqlalchemy.exc import DataError
+from sqlalchemy.orm import joinedload
 from sqlalchemy.orm.exc import NoResultFound
 from furl import furl
 from urllib.parse import unquote
@@ -35,7 +36,9 @@ def submit():
 @blueprint.route("/post/<postid>")
 def post(postid=None):
     try:
-        post = g.sql.query(Post).filter(Post.data['id'] == postid).one()
+        post = g.sql.query(Post).filter(Post.data['id'] == postid).options(
+            joinedload(Post.author)
+        ).one()
     except (NoResultFound, DataError):
         abort(404)
 
@@ -46,7 +49,9 @@ def post(postid=None):
 
 @blueprint.route("/archive/<url>")
 def archive(url=None, page=1):
-    if not url or not g.sql.query(Post).filter(Post.url == url).limit(1).count():
+    if not url or not g.sql.query(Post).filter(
+        Blog.name == url
+    ).filter(Post.author_id == Blog.id).limit(1).count():
         abort(404)
 
     try:
@@ -63,7 +68,9 @@ def archive(url=None, page=1):
 
     url_for_page = furl(url_for("archive.archive", url=url), {"page": "$page"})
 
-    sql = g.sql.query(Post).filter(Post.url == url)
+    sql = g.sql.query(Post).filter(Blog.name == url).filter(Post.author_id == Blog.id).options(
+        joinedload(Post.author)
+    )
 
     if tag:
         url_for_page.set({"tag": tag})

@@ -10,6 +10,7 @@ sql = sm()
 class Blog(object):
     def __init__(self, url):
         self.url = url
+        # XXX post.url remove
         self.ids = set(x[0] for x in sql.query(Post.data['id']).filter(Post.url == self.url).all())
 
     def add(self, data):

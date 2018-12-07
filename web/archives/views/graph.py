@@ -10,6 +10,7 @@ blueprint = Blueprint('graph', __name__)
 
 
 def generate_post_graph(post):
+    # XXX post.url remove
     if g.redis.exists("viscache:" + post.url):
         return json.loads(g.redis.get("viscache:" + post.url))
 
@@ -41,10 +42,10 @@ def generate_post_graph(post):
 
     return vis
 
-@blueprint.route("/<url>/users")
-def graph(url=None):
+@blueprint.route("/<author_name>/users")
+def graph(author_name=None):
     try:
-        post = g.sql.query(Post).filter(Post.url == url).limit(1).one()
+        post = g.sql.query(Post).filter(Blog.name == author_name).filter(Post.author_id == Blog.id).limit(1).one()
     except NoResultFound:
         return abort(404)
 

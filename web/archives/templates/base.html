@@ -128,7 +128,7 @@
 		</ul>
 		{% endif %}
 		{% if post %}
-		<li class="bold"><a href="{{url_for("archive.archive", url=post.url, page=1)}}">{{post.url}}</a></li>
+		<li class="bold"><a href="{{url_for("archive.archive", url=post.author.name, page=1)}}">{{post.author.name}}</a></li>
 		<li class="bold active"><a href="{{url_for("archive.post", postid=post.data['id'])}}">#{{post.data['id']}}</a></li>
 		{% endif %}
 	</ul>

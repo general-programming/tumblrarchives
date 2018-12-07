@@ -12,6 +12,7 @@ def cache_ids(redis, db, url):
     if redis.exists("cache:pids:" + url):
         return
 
+    # XXX post.url remove
     pids = [x[0] for x in db.query(Post.data['id']).filter(Post.url == url).all()]
     pipeline = redis.pipeline()
     for pid in pids:
