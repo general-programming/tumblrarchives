@@ -1,4 +1,6 @@
 import re
+import gzip
+import sys
 
 from redis import StrictRedis
 from archives.lib.connections import redis_pool
@@ -6,8 +8,10 @@ from archives.lib.connections import redis_pool
 redis = StrictRedis(connection_pool=redis_pool)
 blogs = set()
 
-with open("tumblr_posts.txt", "r") as f:
+with gzip.open("blogs1M.csv.gz", "r") as f:
     for line in f:
+        line = line.decode("utf8")
+
         match = re.search(r"://([\w\d]+\.tumblr.com)", line)
         if not match:
             continue
@@ -16,4 +20,7 @@ with open("tumblr_posts.txt", "r") as f:
 
 for blog in blogs:
     redis.sadd("tumblr:urls", blog)
+    sys.stdout.write(".")
     # print(blog)
+
+sys.stdout.write("\n")

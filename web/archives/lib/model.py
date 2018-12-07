@@ -92,6 +92,7 @@ class Blog(Base):
 
     nsfw = Column(Boolean, server_default='f')
     total_posts = Column(Integer, server_default='0', nullable=False)
+    total_likes = Column(Integer, server_default='0', nullable=False)
 
     data = Column(JSONB, nullable=False)
     extra_meta = Column(JSONB)
