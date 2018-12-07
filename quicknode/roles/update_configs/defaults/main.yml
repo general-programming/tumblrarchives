@@ -1,0 +1,2 @@
+syslog_server: '192.168.3.1'
+syslog_port: '5140'

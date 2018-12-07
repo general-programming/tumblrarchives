@@ -1,0 +1,9 @@
+- hosts: all_hosts
+  become: true
+  strategy: free
+  roles:
+    - role: update_packages
+    - role: setup_openvpn
+    - role: update_configs
+  vars:
+    syslog_port: '5140'

@@ -1,0 +1,3 @@
+# One time setup provisoning.
+- import_playbook: playbook_bootstrap_servers.yml
+- import_playbook: playbook_cluster_backbone.yml

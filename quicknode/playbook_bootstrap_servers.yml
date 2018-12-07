@@ -1,0 +1,14 @@
+- hosts: all_hosts
+  gather_facts: false
+  become: true
+  strategy: free
+  roles:
+    - role: bootstrap_ansible
+
+  post_tasks:
+    - file:
+        path: /etc/.ansible-provisioned
+        owner: root
+        group: root
+        mode: 644
+        state: touch

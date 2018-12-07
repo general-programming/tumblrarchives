@@ -1,0 +1,23 @@
+---
+
+- name: "openvpn - Install"
+  package:
+    name: "openvpn"
+    state: present
+
+- name: "openvpn - Copy main config"
+  copy:
+    src: "server.ovpn"
+    dest: "/etc/openvpn/client.conf"
+    owner: root
+    group: root
+    mode: 0644
+  register: ovpn_conf
+
+# systemd
+- name: "tincd - Update systemd daemon configuration and restart daemon"
+  systemd:
+    name: "openvpn@client"
+    enabled: true
+    state: restarted
+  when: ovpn_conf.changed
