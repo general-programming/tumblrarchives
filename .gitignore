@@ -9,3 +9,5 @@ dist/
 .env
 .ftpconfig
 .envrc
+*.txt.gz
+*.csv.gz

@@ -12,6 +12,8 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.schema import Index
 
+from archives.lib.utils import clean_data
+
 debug = os.environ.get('DEBUG', False)
 
 engine = create_engine(os.environ["POSTGRES_URL"], convert_unicode=True, pool_recycle=3600)
@@ -87,29 +89,55 @@ class Blog(Base):
     tumblr_uid = Column(String, nullable=False)
     url = Column(String(200))
     name = Column(String(200))
+
     nsfw = Column(Boolean, server_default='f')
+    total_posts = Column(Integer, server_default='0', nullable=False)
 
     data = Column(JSONB, nullable=False)
     extra_meta = Column(JSONB)
 
     @classmethod
     def create_from_metadata(cls, db, info):
+        # Try to work with an existing blog object first.
+        blog_object = db.query(Blog).filter(Blog.tumblr_uid == info["blog"]["uuid"]).scalar()
+
+        # Setup the new data to update.
         blog_data = dict(
             url=urlparse(info["blog"].pop("url")).netloc,
             name=info["blog"].pop("name"),
-            tumblr_uid=info["blog"].pop("uuid"),
             nsfw=info["blog"].pop("is_nsfw", False),
             extra_meta=info.get("meta", {})
         )
-        blog_data["data"] = info["blog"]
-    
-        db.execute(insert(Blog).values(
-            **blog_data
-        ).on_conflict_do_update(index_elements=["tumblr_uid"], set_=blog_data))
 
-        return db.query(Blog).filter(
-            Blog.tumblr_uid == blog_data["tumblr_uid"]
-        ).scalar()
+        # Make sure we do not bump total posts down.
+        blog_data["total_posts"] = max(
+            info["blog"].pop("total_posts"),
+            getattr(blog_object, "total_posts", 0)
+        )
+
+        # The UUID never changes.
+        if not blog_object:
+            blog_data["tumblr_uid"] = info["blog"].pop("uuid"),
+
+        # Insert what's left of the data into the data
+        blog_data["data"] = info["blog"]
+
+        # Clean the data of null bytes.
+        clean_data(blog_data)
+
+        if not blog_object:
+            # Insert and query the blog object if it does not exist.
+            db.execute(insert(Blog).values(
+                **blog_data
+            ).on_conflict_do_update(index_elements=["tumblr_uid"], set_=blog_data))
+            blog_object = db.query(Blog).filter(
+                Blog.tumblr_uid == blog_data["tumblr_uid"]
+            ).scalar()
+        else:
+            for key, value in blog_data.items():
+                setattr(blog_object, key, value)
+
+        return blog_object
 
 # Index for querying by url.
 Index("index_post_url", Post.url)
