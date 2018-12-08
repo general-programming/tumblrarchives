@@ -33,10 +33,10 @@ def submit():
 
     return render_template("submit.html", toast=toast)
 
-@blueprint.route("/post/<postid>")
+@blueprint.route("/post/<int:postid>")
 def post(postid=None):
     try:
-        post = g.sql.query(Post).filter(Post.data['id'] == postid).options(
+        post = g.sql.query(Post).filter(Post.tumblr_id == postid).options(
             joinedload(Post.author)
         ).one()
     except (NoResultFound, DataError):
@@ -73,14 +73,15 @@ def archive(url=None, page=1):
     )
 
     if tag:
-        url_for_page.set({"tag": tag})
-        # complete tag hack because i have no idea how to filter json arrays with jsonb (lol)
-        sql = sql.filter(func.lower(Post.data['tags'].cast(TEXT)).contains('"' + tag + '"'))
+        url_for_page.set({"tag": tag, "page": "$page"})
+        # ~~complete tag hack because i have no idea how to filter json arrays with jsonb (lol)~~
+        # Still a nasty hack for lower case searching but hey, it's using native arrays.
+        sql = sql.filter(func.lower(Post.tags.cast(TEXT)).contains(tag.lower()))
     elif posttype in POST_TYPES:
-        url_for_page.set({"type": posttype})
-        sql = sql.filter(Post.data['type'].astext == posttype)
+        url_for_page.set({"type": posttype, "page": "$page"})
+        sql = sql.filter(Post.post_type == posttype)
 
-    posts = Page(sql.order_by(Post.data['timestamp'].desc()), items_per_page=15, page=page)
+    posts = Page(sql.order_by(Post.posted.desc()), items_per_page=15, page=page)
 
     return render_template(
         "archive.html",

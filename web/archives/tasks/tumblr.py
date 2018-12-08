@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 
-from archives.lib.model import Post
+from archives.lib.model import Post, Blog
 from archives.tasks import WorkerTask, celery
 from celery.exceptions import Reject, Retry
 from celery.utils.log import get_task_logger
@@ -12,8 +12,7 @@ def cache_ids(redis, db, url):
     if redis.exists("cache:pids:" + url):
         return
 
-    # XXX post.url remove
-    pids = [x[0] for x in db.query(Post.data['id']).filter(Post.url == url).all()]
+    pids = [x[0] for x in db.query(Post.tumblr_id).filter(Post.author_id == Blog.id).filter(Blog.name == url).all()]
     pipeline = redis.pipeline()
     for pid in pids:
         pipeline.sadd("cache:pids:" + url, pid)
@@ -29,25 +28,12 @@ def check_ratelimit(redis, key, max_hits=60, expire=60):
         redis.expire(key, expire)
 
 @celery.task(base=WorkerTask)
-def add_post(url, blob):
+def add_post(blob):
     redis = add_post.redis
     db = add_post.db
 
-    if redis.sismember("cache:pids:" + url, blob["id"]):
-        redis.incr("cache:bad:" + url)
-        redis.expire("cache:bad:" + url, 60)
-        return {"status": "Post %s in database." % (blob["id"])}
-
-    try:
-        db.add(Post(
-            url=url,
-            data=blob
-        ))
-        db.commit()
-        redis.sadd("cache:pids:" + url, blob["id"])
-    except IntegrityError as e:
-        logger.error("Caught IntegrityError: %s" % (e))
-        db.rollback()
+    post = Post.create_from_metadata(db, blob)
+    db.commit()
 
 @celery.task(base=WorkerTask)
 def archive_post(url=None, post_id=None):
@@ -65,7 +51,7 @@ def archive_post(url=None, post_id=None):
 
     check_ratelimit(redis, "api_access")
 
-    add_post.delay(url, tumblr.posts(url, id=post_id)["posts"][0])
+    add_post.delay(tumblr.posts(url, id=post_id)["posts"][0])
 
 @celery.task(base=WorkerTask)
 def archive_blog(url=None, offset=0, totalposts=0):
@@ -104,7 +90,7 @@ def archive_blog(url=None, offset=0, totalposts=0):
 
     # Archive posts
     for post in posts:
-        add_post.delay(url, post)
+        add_post.delay(post)
 
     # Start the next task.
     archive_blog.apply_async((url, offset + 20, totalposts), eta=datetime.now() + timedelta(seconds=1))

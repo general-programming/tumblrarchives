@@ -1,6 +1,6 @@
 import json
 
-from archives.lib.model import Post
+from archives.lib.model import Post, Blog
 from archives.lib.utils import get_profile
 from flask import (Blueprint, abort, g, jsonify, redirect, render_template,
                    request)
@@ -10,14 +10,13 @@ blueprint = Blueprint('graph', __name__)
 
 
 def generate_post_graph(post):
-    # XXX post.url remove
-    if g.redis.exists("viscache:" + post.url):
-        return json.loads(g.redis.get("viscache:" + post.url))
+    if g.redis.exists("viscache:" + post.author.tumblr_uid):
+        return json.loads(g.redis.get("viscache:" + post.author.tumblr_uid))
 
     blogs = post.get_linked_blogs()
     top_id = 1
     current_id = 1
-    nodes = [{"id": 1, "label": post.url, "shape": "circularImage", "image": get_profile(post.url, g.redis, g.tumblr)}]
+    nodes = [{"id": 1, "label": post.author.name, "shape": "circularImage", "image": get_profile(post.author.name, g.redis, g.tumblr)}]
     edges = []
 
     for blog in blogs:
@@ -38,7 +37,7 @@ def generate_post_graph(post):
         "edges": edges
     }
 
-    g.redis.setex("viscache:" + post.url, 3600, json.dumps(vis))
+    g.redis.setex("viscache:" + post.author.tumblr_uid, 3600, json.dumps(vis))
 
     return vis
 

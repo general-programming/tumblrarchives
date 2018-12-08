@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% set active_page = "post" %}
-{% set breadcrumb = post.data["id"] %}
+{% set breadcrumb = post.tumblr_id %}
 
 {% block content: %}
 
@@ -16,15 +16,15 @@
 		<!-- JSON post -->
 		<div class="col s12">
 			<!-- Ugly HTML because the newlines render in the pre text. -->
-			<pre class="hljs code"><span class="codeinfo">JSON <a href="{{url_for("archive.post", postid=post.data['id'], json=1)}}"> raw </a></span>
-<code>{{post.data|prettyjson}}</code></pre>
+			<pre class="hljs code"><span class="codeinfo">JSON <a href="{{url_for("archive.post", postid=post.tumblr_id, json=1)}}"> raw </a></span>
+<code>{{post.to_dict()|prettyjson}}</code></pre>
 		</div>
 
 		<!-- Table card -->
 		<div class="col s12">
 			<div class="card" style="padding: 0">
 				<table class="table bordered hover striped">
-				{% for key, value in post.data.items() %}
+				{% for key, value in post.to_dict().items() %}
 				<tr>
 					<td> {{key}} </td>
 					<td> {{value}} </td>

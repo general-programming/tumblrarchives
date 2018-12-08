@@ -61,10 +61,10 @@
 	{% endif %}
 
 	<div class="bottom">
-		<a href="{{url_for("archive.post", postid=post.data['id'])}}"><b title="{{post.data['date']}}">{{post.data['timestamp']|prettydate}}</b></a>
-		<a style="float: right" class="btn waves-effect waves-light green" target="_blank" href="http://tumblr.com/reblog/{{post.data['id']}}/{{post.data['reblog_key']}}"> <i class="material-icons">repeat</i></a>
-		{% if post.data['tags'] %}
-		<span class="tags"> - {% for tag in post.data['tags'] %} <a href="{{url_for("archive.archive", url=url, tag=tag, page=1)}}">#{{tag}}</a> {% endfor %}</span>
+		<a href="{{url_for("archive.post", postid=post.tumblr_id)}}"><b title="{{post.posted.strftime("%Y-%m-%d %H:%M:%S %Z")}}">{{post.posted|prettydate}}</b></a>
+		<a style="float: right" class="btn waves-effect waves-light green" target="_blank" href="http://tumblr.com/reblog/{{post.tumblr_id}}/{{post.reblog_key}}"> <i class="material-icons">repeat</i></a>
+		{% if post.tags %}
+		<span class="tags"> - {% for tag in post.tags %} <a href="{{url_for("archive.archive", url=url, tag=tag, page=1)}}">#{{tag}}</a> {% endfor %}</span>
 		{% endif %}
 	</div>
 </div>
@@ -129,7 +129,7 @@
 		{% endif %}
 		{% if post %}
 		<li class="bold"><a href="{{url_for("archive.archive", url=post.author.name, page=1)}}">{{post.author.name}}</a></li>
-		<li class="bold active"><a href="{{url_for("archive.post", postid=post.data['id'])}}">#{{post.data['id']}}</a></li>
+		<li class="bold active"><a href="{{url_for("archive.post", postid=post.tumblr_id)}}">#{{post.tumblr_id}}</a></li>
 		{% endif %}
 	</ul>
 </header>
