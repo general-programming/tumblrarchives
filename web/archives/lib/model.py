@@ -68,6 +68,7 @@ class Post(Base):
     author = relationship("Blog")
     # photos = relationship("Photo")
 
+    body = Column(Unicode)
     data = Column(JSONB, nullable=False)
 
     def to_dict(self, with_meta=True):
@@ -101,6 +102,10 @@ class Post(Base):
         post_data = dict(
             tumblr_id=info.pop("id"),
         )
+
+        # Post body
+        if "body" in info and info["body"]:
+            post_data["body"] = info.pop("body")
 
         # Post time
         info.pop("date", None)
