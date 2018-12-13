@@ -52,7 +52,6 @@ class Post(Base):
     tumblr_id = Column(BigInteger)
 
     posted = Column(DateTime)
-    author = relationship("Blog")
 
     post_type = Column(String)
     tags = Column(ARRAY(Unicode))
@@ -65,11 +64,15 @@ class Post(Base):
     url = Column(String(200))
     slug = Column(Unicode)
     summary = Column(Unicode)
+
+    author = relationship("Blog")
+    # photos = relationship("Photo")
+
     data = Column(JSONB, nullable=False)
 
     def to_dict(self, with_meta=True):
         result = dict(
-            posted=self.posted,
+            posted=self.posted.strftime("%Y-%m-%d %H:%M:%S %Z"),
             post_type=self.post_type,
             tags=self.tags,
             format=self.format,
@@ -152,6 +155,11 @@ class Post(Base):
         # Pop away user specific fields.
         for key in ["followed", "liked"]:
             info.pop(key, None)
+
+        # Pop away fields that would be empty.
+        for key in ["trail", "recommended_color", "recommended_source"]:
+            if not info.get(key, None):
+                info.pop(key, None)
 
         # Insert what's left of the data into the data
         post_data["data"] = info
@@ -290,6 +298,7 @@ class Blog(Base):
     total_posts = Column(Integer, server_default='0', nullable=False)
     total_likes = Column(Integer, server_default='0', nullable=False)
 
+    theme = Column(JSONB)
     data = Column(JSONB, nullable=False)
     extra_meta = Column(JSONB)
 
@@ -331,6 +340,10 @@ class Blog(Base):
         else:
             # Pop the UUID away from the blog object.
             blog_info.pop("uuid")
+
+        # Theme
+        if "theme" in blog_info:
+            blog_data["theme"] = blog_info.pop("theme")
 
         # Insert what's left of the data into the data
         blog_data["data"] = blog_info

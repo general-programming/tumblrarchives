@@ -1,0 +1,3 @@
+[submodule "web/extras/nsfwload/archiveteam-items"]
+	path = web/extras/nsfwload/archiveteam-items
+	url = https://github.com/ArchiveTeam/tumblr-items.git

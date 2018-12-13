@@ -101,8 +101,10 @@ class BlogManager(object):
 
             # Get posts of the offset.
             posts_response = self.tumblr.posts(name, offset=offset)
-            if posts_response.get("meta", {}).get("status", None) == 503:
+            if posts_response.get("meta", {}).get("status", None) in (502, 503):
                 self.log(posts_response)
+                time.sleep(4)
+                self.process(name, offset, last_crawl, total_posts)
                 return
 
             # Add the posts one by one.
